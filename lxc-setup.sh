@@ -1,11 +1,9 @@
 #!/bin/bash
 
-#       lan0: external - 10.0.0.0/24 - public + firewall
 # intra-lan0: internal - 10.1.0.0/24 - firewall + lb
 # intra-lan1: internal - 10.1.1.0/24 - lb + webapp
 # intra-lan2: internal - 10.1.2.0/24 - webapp + database + storage
-#       lan1: work - 10.2.0.0/24 - [OPTIONAL] nagios + mgmt + else 
-#       NOTE: "Only selected incoming connections are accepted here mgmt -> else"
+#  mgmt-lan0: work - 10.2.0.0/24 - [OPTIONAL] nagios + mgmt + else 
 
 user=$(whoami)
 if [ $user != 'root' ]; then
@@ -31,13 +29,6 @@ if [ $bctl = 0 ]; then
 fi
 echo "..bridge-utils ya instalado"
 
-pthon=$(dpkg-query -W -f='${Status}' python 2>/dev/null | grep -c "ok installed")
-if [ $pthon = 0 ]; then
-  echo "..Se instala python para poder levantar bridges virtuales"
-  sudo apt install -y python
-fi
-echo "..python ya instalado"
-
 # net config
 
 echo ".Se procede a configurar el entorno de red"
@@ -52,13 +43,16 @@ echo "..Se procede a levantar los bridges en el sistema"
 sudo ifconfig intra-lan0 up
 sudo ifconfig intra-lan1 up
 sudo ifconfig intra-lan2 up
-exit
+
 # lxc
 
 echo ".Se ejecuta el fichero ./firewall/lxc-firewall.sh que crea y configura un firewall"
-chmod +x firewall/lxc-firewall.sh
+chmod +x ./firewall/lxc-firewall.sh
 ./firewall/lxc-firewall.sh
 echo ".Se ejecuta el fichero ./loadbalancer/lxc-lb.sh que crea y configura un balanceador de carga"
+echo ".Se ejecuta el fichero ./webapp/lxc-webapp.sh que crea y configura el servicio web con redundancia"
+chmod +x ./webapp/lxc-webapp.sh
+./webapp/lxc-webapp.sh
 
 # echo "Para poder configurar glusterfs los contenedores han de tener privilegios sobre el sistema"
 # echo "Se procede a escalar de privilegios a los contenedores storage"
