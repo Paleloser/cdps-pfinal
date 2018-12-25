@@ -1,0 +1,43 @@
+{
+  "image": "images:ubuntu/18.04",
+  "name": "webserver",
+  "dependencies": [
+    "lynx",
+    "net-tools",
+    "traceroute",
+    "git",
+    "npm"
+  ],
+  "interfaces": [
+    {
+      "name": "eth0",
+      "network": "intra-lan1",
+      "address": "10.1.1.2/24"
+    },
+    {
+      "name": "eth1",
+      "network": "intra-lan2",
+      "address": "10.1.2.1/24"
+    }
+  ],
+  "forwarding": true,
+  "run": [
+    "git clone https://github.com/CORE-UPM/quiz_2019.git /root/quiz_2019 1>/dev/null",
+    "mkdir /root/quiz_2019/public/uploads",
+    "cd /root/quiz_2019; npm install 1>/dev/null",
+    "cd /root/quiz_2019; npm install -g forever 1>/dev/null",
+    "cd /root/quiz_2019; npm install --save mysql2 1>/dev/null"
+  ],
+  "cmd": [
+    "forever start /root/quiz_2019/bin/www"
+  ],
+  "env": {
+    "DATABASE_URL": "mysql://root:xxxx@10.1.2.4:3306/quiz",
+    "QUIZ_OPEN_REGISTER": "yes"
+  },
+  "scripts": [
+    "lxc exec webserver1 -- bash -c \"cd /root/quiz_2019; npm run-script migrate_cdps 1>/dev/null\"",
+    "lxc exec webserver1 -- bash -c \"cd /root/quiz_2019; npm run-script seed_cdps 1>/dev/null\""
+  ],
+  "replication": 3
+}

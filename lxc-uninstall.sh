@@ -5,15 +5,15 @@ if [ $user != 'root' ]; then
 fi
 
 echo "Borrando contenedores..."
-lxc delete firewall --force
-lxc delete loadbalancer --force
+lxc delete firewall1 --force
+lxc delete loadbalancer1 --force
 lxc delete webserver1 --force
 lxc delete webserver2 --force
 lxc delete webserver3 --force
-lxc delete storage0 --force
 lxc delete storage1 --force
 lxc delete storage2 --force
-lxc delete database --force
+lxc delete storage3 --force
+lxc delete database1 --force
 
 echo "Desconectando interfaces de red"
 sudo ifconfig intra-lan0 down
@@ -24,5 +24,8 @@ echo "Borrando bridges"
 sudo brctl delbr intra-lan0
 sudo brctl delbr intra-lan1
 sudo brctl delbr intra-lan2
+
+echo "Borrando ficheros intermedios"
+rm ./scripts/lxc-py-*
 
 echo "Desinstalacion completada"

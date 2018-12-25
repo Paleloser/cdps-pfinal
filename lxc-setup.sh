@@ -46,13 +46,12 @@ sudo ifconfig intra-lan2 up
 
 # lxc
 
-echo ".Se ejecuta el fichero ./firewall/lxc-firewall.sh que crea y configura un firewall"
 chmod +x ./firewall/lxc-firewall.sh
 ./firewall/lxc-firewall.sh
-echo ".Se ejecuta el fichero ./loadbalancer/lxc-lb.sh que crea y configura un balanceador de carga"
-echo ".Se ejecuta el fichero ./webapp/lxc-webapp.sh que crea y configura el servicio web con redundancia"
-chmod +x ./webapp/lxc-webapp.sh
-./webapp/lxc-webapp.sh
+# chmod +x ./loadbalancer/lxc-loadbalancer.sh
+# ./loadbalancer/lxc-loadbalancer.sh
+# chmod +x ./webapp/lxc-webapp.sh
+# ./webapp/lxc-webapp.sh
 
 # echo "Para poder configurar glusterfs los contenedores han de tener privilegios sobre el sistema"
 # echo "Se procede a escalar de privilegios a los contenedores storage"
