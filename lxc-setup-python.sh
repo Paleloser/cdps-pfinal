@@ -29,21 +29,25 @@ if [ $bctl = 0 ]; then
 fi
 echo "[******]..bridge-utils ya instalado"
 
-# net config
+# python pakcages check
 
-echo "[******].Se procede a configurar el entorno de red"
+echo "[******].Se hace un control de paquetes python"
 
-echo "[******]..Se crea bridge que aisla la red interna de la publica"
-sudo brctl addbr intra-lan0
-echo "[******]..Se crea bridge que aisla la red de los servicios de la del balanceador"
-sudo brctl addbr intra-lan1
-echo "[******]..Se crea bridge que aisla la red de almacenamiento de la de los servidores"
-sudo brctl addbr intra-lan2
-echo "[******]..Se procede a levantar los bridges en el sistema"
-sudo ifconfig intra-lan0 up
-sudo ifconfig intra-lan1 up
-sudo ifconfig intra-lan2 up
+if python -c 'import pkgutil; exit(not pkgutil.find_loader("pybrctl"))'; then
+    echo '[******]..Paquete de python pybrctl ya instalado'
+else
+    echo '[******]..Se instala el paquete de python: pybrctl'
+    pip install pybrctl
+fi
+
+if python -c 'import pkgutil; exit(not pkgutil.find_loader("yaml"))'; then
+    echo '[******]..Paquete de python yaml ya instalado'
+else
+    echo '[******]..Se instala el paquete de python: yaml'
+    pip install yaml
+fi
 
 python ./lxc-setup.py ./firewall/firewall-cfg.json
 python ./lxc-setup.py ./loadbalancer/loadbalancer-cfg.json
+python ./lxc-setup.py ./database/database-cfg.json
 python ./lxc-setup.py ./webapp/webserver-cfg.json
