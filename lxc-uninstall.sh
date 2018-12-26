@@ -27,5 +27,6 @@ sudo brctl delbr intra-lan2
 
 echo "Borrando ficheros intermedios"
 rm ./scripts/lxc-py-*
+rm 10-lxc.yaml
 
 echo "Desinstalacion completada"

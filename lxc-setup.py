@@ -78,9 +78,10 @@ def applyNetplan(node, cfg):
   print('[%s]..Se aplica el plan de red' % (node))
   os.system('lxc file push ./10-lxc.yaml %s/etc/netplan/10-lxc.yaml' % (node))
   os.system('lxc exec %s -- bash -c "netplan apply"' % (node))
-  if cfg['forwarding']:
-    print('[%s]...Se habilita redireccionamiento IP' % (node))
-    os.system('lxc exec %s -- bash -c \"echo \'net.ipv4.ip_forward = 1\' >> /etc/sysctl.conf\"' % (node))
+  if 'forwarding' in cfg:
+    if cfg['forwarding']:
+      print('[%s]...Se habilita redireccionamiento IP' % (node))
+      os.system('lxc exec %s -- bash -c \"echo \'net.ipv4.ip_forward = 1\' >> /etc/sysctl.conf\"' % (node))
 
 def setEnv(node, cfg):
   print('[%s]..Se configuran las variables de entorno' % (node))
