@@ -27,11 +27,12 @@
     "mkdir /root/quiz_2019/public/uploads",
     "cd /root/quiz_2019; npm install 1>/dev/null",
     "cd /root/quiz_2019; npm install -g forever 1>/dev/null",
-    "cd /root/quiz_2019; npm install --save mysql2 1>/dev/null",
-    "cd /root/quiz_2019; npm run-script migrate_cdps",
-    "cd /root/quiz_2019; npm run-script seed_cdps"
+    "cd /root/quiz_2019; npm install --save mysql2 1>/dev/null"
   ],
   "cmd": [
+    "export DATABASE_URL=mysql://quiz:xxxx@10.1.2.4/quiz",
+    "export QUIZ_OPEN_REGISTER=yes",
+    "echo $DATABASE_URL > /root/proof",
     "forever start /root/quiz_2019/bin/www"
   ],
   "env": {
@@ -39,8 +40,8 @@
     "QUIZ_OPEN_REGISTER": "yes"
   },
   "scripts": [
-    "lxc exec webserver1 --env DATABASE_URL=mysql://quiz:xxxx@10.1.2.4/quiz QUIZ_OPEN_REGISTER=yes -- bash -c \"cd /root/quiz_2019; npm run-script migrate_cdps\"",
-    "lxc exec webserver1 --env DATABASE_URL=mysql://quiz:xxxx@10.1.2.4/quiz QUIZ_OPEN_REGISTER=yes -- bash -c \"cd /root/quiz_2019; npm run-script seed_cdps\""
+    "lxc exec webserver1 -- bash -c \"export DATABASE_URL=mysql://quiz:xxxx@10.1.2.4/quiz; export QUIZ_OPEN_REGISTER=yes; cd /root/quiz_2019; npm run-script migrate_cdps\"",
+    "lxc exec webserver1 -- bash -c \"export DATABASE_URL=mysql://quiz:xxxx@10.1.2.4/quiz; export QUIZ_OPEN_REGISTER=yes; cd /root/quiz_2019; npm run-script seed_cdps\""
   ],
   "replication": 3
 }

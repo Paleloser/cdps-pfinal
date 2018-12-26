@@ -55,14 +55,14 @@ def cmd(node, cfg):
   if os.path.exists('./scripts/lxc-py-%s-on-boot.sh' % (node)):
     os.remove('./scripts/lxc-py-%s-on-boot.sh' % (node))
   outfile=open('./scripts/lxc-py-%s-on-boot.sh' % (node), 'w+')
-  for script in cfg['cmd']:
-    print('[%s]...Se anade: %s' % (node, script))
-    for line in bootfile:
-      if 'start)' in line:
-        outfile.write(line)
-        outfile.write('%s' % (script))
-      else:
-        outfile.write(line)
+  for line in bootfile:
+    if 'start)' in line:
+      outfile.write(line)
+      for script in cfg['cmd']:
+        print('[%s]...Se anade: %s' % (node, script))
+        outfile.write('%s\n' % (script))
+    else:
+      outfile.write(line)
   bootfile.close()
   outfile.close()
   print('[%s]...Se sube el script a %s/etc/init.d/' % (node, node))
