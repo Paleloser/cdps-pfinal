@@ -5,8 +5,11 @@ import time
 import yaml
 from pybrctl import BridgeController
 
-# Minor functions
+###################
+# Minor functions #
+###################
 
+# In replication cases, only the first address is given, so we have to craft the addr of the replicas
 def parseAddr(addr, i):
   split1=addr.split('/')
   split2=[]
@@ -18,21 +21,27 @@ def parseAddr(addr, i):
   res=('%s.%s.%s.%s/%s' % (split2[0][0], split2[0][1], split2[0][2], split2[0][3], split2[1][0]))
   return res
 
-# Core functions in the order they are called along the installation process
+##############################################################################
+# Core functions in the order they are called along the installation process #
+##############################################################################
 
+# Launches the container
 def launchContainer(node, cfg):
   os.system('lxc launch %s %s 1>/dev/null' % (cfg['image'], node))
   time.sleep(5)
 
+# Execs update/upgrade in the container
 def updateContainer(node, cfg):
   print('[%s]..Se actualizan los paquetes' % (node))
   os.system('lxc exec %s -- bash -c "apt-get update 1>/dev/null"' % (node))
   os.system('lxc exec %s -- bash -c "apt-get upgrade 1>/dev/null"' % (node))
 
+# Gives privileges to the container (it is needed for the NAS servers)
 def setPrivileges(node):
   print('[%s]..Se le dan privilegios al contenedor' % (node))
   os.system('lxc config set %s security.privileged true' % (node))
 
+# Installs all the pgms needed on the container specified by 'dependencies: []'
 def installDependencies(node, cfg):
   print('[%s]..Se instalan las dependencias' % (node))
   for dep in cfg['dependencies']:
@@ -40,6 +49,7 @@ def installDependencies(node, cfg):
     os.system('lxc exec %s -- bash -c "apt-get install -y %s 1>/dev/null"' % (node, dep))
   print('[%s]..Dependencias instaladas' % (node))
 
+# Sets the environment variables defined by 'env: {}'
 def setEnv(node, cfg):
   print('[%s]..Se configuran las variables de entorno' % (node))
   for var in cfg['env']:
@@ -47,12 +57,14 @@ def setEnv(node, cfg):
     os.system('lxc exec %s -- bash -c \"export %s=%s\"' % (node, var, cfg['env'][var]))
     os.system('lxc exec %s -- bash -c \"echo \'export %s=%s\' >> /root/.bashrc\"' % (node, var, cfg['env'][var]))
 
+# Runs the commands in the container specified in 'run: []'
 def run(node, cfg):
   print('[%s]..Se ejecuta la pila de run definidos' % (node))
   for script in cfg['run']:
     print('[%s]...Se ejecuta: %s' % (node, script))
     os.system('lxc exec %s -- bash -c "%s"' % (node, script))
 
+# Generates a script which will be executed on-boot in the container. It contains the commands specified in 'cmd: []'
 def cmd(node, cfg):
   print('[%s]..Se genera el script a correr on-boot' % (node))
   bootfile=open('./scripts/lxc-on-boot.sh', 'r+')
@@ -76,6 +88,7 @@ def cmd(node, cfg):
   os.system('lxc exec %s -- bash -c "chgrp root /etc/init.d/lxc-%s-on-boot.sh"' % (node, node))
   os.system('lxc exec %s -- bash -c "sudo update-rc.d lxc-%s-on-boot.sh defaults"' % (node, node))
 
+# Configures the networking in the host: creates necessary bridges
 def configHostNetwork(node, cfg):
   print('[%s]..Se configuran las redes necesarias en host' % (node))
   for interface in cfg['interfaces']:
@@ -87,12 +100,14 @@ def configHostNetwork(node, cfg):
         print('[%s]...Red %s no existe, se crea el bridge' % (node, interface['network']))
         brctl.addbr(interface['network'])
 
+# Sets defult network.manager to ifupdown (/etc/network/interfaces)
 def configNetplan(node, cfg):
   if ('18' in cfg['image']) or ('bionic' in cfg['image']):
     print('[******] Imagen detectada como ubuntu:18.04. Instalamos ifupdown.')
     os.system('lxc exec %s -- bash -c "apt-get install -y ifupdown 1>/dev/null"' % (node))
     os.system('lxc exec %s -- bash -c "apt-get purge -y netplan.io 1>/dev/null"' % (node))
 
+# Configures the networking in the container: attaches bridges to container for network isolation
 def configContainerNetwork(node, cfg):
   print('[%s]..Se configuran las interfaces de red' % (node))
   print('[%s]..Se para el contenedor' % (node))
@@ -106,6 +121,7 @@ def configContainerNetwork(node, cfg):
   print('[%s]..Se inicia el contenedor' % (node))
   os.system('lxc start %s 1>/dev/null' % (node))
 
+# Configures the internal networking in the container (/etc/network/interfaces script)
 def createNetplan(node, cfg, i):
   print('[%s]..Se crea el plan de red' % (node))
   with open('interfaces', 'w') as outfile:
@@ -130,6 +146,7 @@ def createNetplan(node, cfg, i):
         outfile.write('\n')
   outfile.close()
 
+# Pushes the generated network script to the containet and loads it
 def applyNetplan(node, cfg):
   print('[%s]..Se aplica el plan de red' % (node))
   os.system('lxc file push ./interfaces %s/etc/network/' % (node))
@@ -139,24 +156,24 @@ def applyNetplan(node, cfg):
       print('[%s]...Se habilita redireccionamiento IP' % (node))
       os.system('lxc exec %s -- bash -c \"echo \'net.ipv4.ip_forward = 1\' >> /etc/sysctl.conf\"' % (node))
 
+# Runs literal scripts ON HOST defined by 'scripts: []'
 def runScripts(cfg):
   print('[******]..Se ejecuta la pila de scripts literales definidos')
   for script in cfg['scripts']:
     print('[******]...Se ejecuta: %s' % (script))
     os.system('%s' % (script))
 
+# Creates a single container defined by its configuration (cfg) and its id (i)
 def createSingleContainer(cfg, i):
   # node will be the variable with the container name along the process
   node="%s%s" % (cfg['name'], i+1)
   print('[%s].Se crea el contenedor' % (node))
   launchContainer(node, cfg)
   print('[%s].Se configura el contenedor' % (node))
-  # apt-get update && upgrade
   updateContainer(node, cfg)
   if 'privileged' in cfg:
     if cfg['privileged']:
       setPrivileges(node)
-  # apt-get install [dependency]
   if 'dependencies' in cfg:
     installDependencies(node, cfg)
   # environment variables always before comands
@@ -168,7 +185,7 @@ def createSingleContainer(cfg, i):
   # run-on-boot commands
   if 'cmd' in cfg:
     cmd(node, cfg)
-  # networking stuff should be applied at last instance
+  # networking stuff should be applied at last instance to avoid isolation problems
   if 'interfaces' in cfg:
     configHostNetwork(node, cfg)
     configNetplan(node, cfg)
@@ -176,10 +193,14 @@ def createSingleContainer(cfg, i):
     createNetplan(node, cfg, i)
     applyNetplan(node, cfg)
 
-# just call createSingleContainer for each replica
+# Just calls createSingleContainer for each replica, passing its id
 def createReplicatedContainer(cfg, replicas):
   for i in range(0, replicas):
     createSingleContainer(cfg, i)
+
+##################################
+# First function executed (main) #
+##################################
 
 def createContainer(cfg):
   # if replication exists and is > 0 then create replicated container
@@ -200,7 +221,9 @@ def createContainer(cfg):
     if cfg['privileged']:
       print('[******] NOTE that %s containers were created with privileges!!!! It is your responsability to turn each container privileges off!!!!' % (cfg['name']))
 
-# START
+#########
+# START #
+#########
 
 filename=sys.argv[1]
 fopen=open(filename, 'r')
