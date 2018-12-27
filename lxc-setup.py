@@ -87,6 +87,12 @@ def configHostNetwork(node, cfg):
         print('[%s]...Red %s no existe, se crea el bridge' % (node, interface['network']))
         brctl.addbr(interface['network'])
 
+def configNetplan(node, cfg):
+  if ('18' in cfg['image']) or ('bionic' in cfg['image']):
+    print('[******] Imagen detectada como ubuntu:18.04. Instalamos ifupdown.')
+    os.system('lxc exec %s -- bash -c "apt-get install -y ifupdown 1>/dev/null"' % (node))
+    os.system('lxc exec %s -- bash -c "apt-get purge -y netplan.io 1>/dev/null"' % (node))
+
 def configContainerNetwork(node, cfg):
   print('[%s]..Se configuran las interfaces de red' % (node))
   print('[%s]..Se para el contenedor' % (node))
@@ -102,34 +108,32 @@ def configContainerNetwork(node, cfg):
 
 def createNetplan(node, cfg, i):
   print('[%s]..Se crea el plan de red' % (node))
-  netplan={}
-  netplan['network']={
-    "version": 2,
-    "ethernets": {}
-  }
-  for interface in cfg['interfaces']:
-    print('[%s]...Se configura %s' % (node, interface['name']))
-    if interface['network'] == 'default':
-      netplan['network']['ethernets'][str(interface['name'])]={
-        "dhcp4": True
-      }
-    else:
-      addr=parseAddr(interface['address'], i)
-      netplan['network']['ethernets'][str(interface['name'])]={
-        "dhcp4": 'no',
-        "addresses": [str(addr)]
-      }
-      if 'gateway4' in interface:
-        netplan['network']['ethernets'][str(interface['name'])]['gateway4']=str(interface['gateway4'])
-  print("[%s]....Plan: %s" % (node, netplan))
-  with open('10-lxc.yaml', 'w') as outfile:
-    yaml.dump(netplan, outfile, default_flow_style=False, allow_unicode=False)
+  with open('interfaces', 'w') as outfile:
+    outfile.write('auto lo\n')
+    outfile.write('iface lo inet loopback\n')
+    outfile.write('\n')
+    for interface in cfg['interfaces']:
+      print('[%s]...Se configura %s' % (node, interface['name']))
+      if interface['network'] == 'default':
+        outfile.write('auto %s\n' % (interface['name']))
+        outfile.write('iface %s inet dhcp\n' % (interface['name']))
+        outfile.write('\n')
+      else:
+        outfile.write('auto %s\n' % (interface['name']))
+        outfile.write('iface %s inet static\n' % (interface['name']))
+        for attribute, value in interface.iteritems():
+          if 'name' in attribute or 'network' in attribute:
+            continue
+          if 'address' in attribute:
+            value=parseAddr(value, i)
+          outfile.write('        %s %s' % (attribute, value))
+        outfile.write('\n')
   outfile.close()
 
 def applyNetplan(node, cfg):
   print('[%s]..Se aplica el plan de red' % (node))
-  os.system('lxc file push ./10-lxc.yaml %s/etc/netplan/10-lxc.yaml' % (node))
-  os.system('lxc exec %s -- bash -c "netplan apply"' % (node))
+  os.system('lxc file push ./interfaces %s/etc/network/' % (node))
+  os.system('lxc exec %s -- bash -c "sudo service network-manager restart" 1>/dev/null' % (node))
   if 'forwarding' in cfg:
     if cfg['forwarding']:
       print('[%s]...Se habilita redireccionamiento IP' % (node))
@@ -140,10 +144,6 @@ def runScripts(cfg):
   for script in cfg['scripts']:
     print('[******]...Se ejecuta: %s' % (script))
     os.system('%s' % (script))
-  
-def removePrivileges(node):
-  print('[%s]..Se eliminan los privilegios del contenedor' % (node))
-  os.system('lxc config set %s security.privileged false' % (node))
 
 def createSingleContainer(cfg, i):
   # node will be the variable with the container name along the process
@@ -171,6 +171,7 @@ def createSingleContainer(cfg, i):
   # networking stuff should be applied at last instance
   if 'interfaces' in cfg:
     configHostNetwork(node, cfg)
+    configNetplan(node, cfg)
     configContainerNetwork(node, cfg)
     createNetplan(node, cfg, i)
     applyNetplan(node, cfg)
