@@ -50,4 +50,5 @@ fi
 python ./lxc-setup.py ./firewall/firewall-cfg.json
 python ./lxc-setup.py ./loadbalancer/loadbalancer-cfg.json
 python ./lxc-setup.py ./database/database-cfg.json
+python ./lxc-setup.py ./storage/storage-cfg.json
 python ./lxc-setup.py ./webapp/webserver-cfg.json

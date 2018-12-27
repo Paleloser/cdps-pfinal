@@ -7,7 +7,8 @@
     "traceroute",
     "git",
     "npm",
-    "mariadb-client"
+    "mariadb-client",
+    "glusterfs-client"
   ],
   "interfaces": [
     {
@@ -32,7 +33,6 @@
   "cmd": [
     "export DATABASE_URL=mysql://quiz:xxxx@10.1.2.4/quiz",
     "export QUIZ_OPEN_REGISTER=yes",
-    "echo $DATABASE_URL > /root/proof",
     "forever start /root/quiz_2019/bin/www"
   ],
   "env": {
@@ -41,7 +41,10 @@
   },
   "scripts": [
     "lxc exec webserver1 -- bash -c \"export DATABASE_URL=mysql://quiz:xxxx@10.1.2.4/quiz; export QUIZ_OPEN_REGISTER=yes; cd /root/quiz_2019; npm run-script migrate_cdps\"",
-    "lxc exec webserver1 -- bash -c \"export DATABASE_URL=mysql://quiz:xxxx@10.1.2.4/quiz; export QUIZ_OPEN_REGISTER=yes; cd /root/quiz_2019; npm run-script seed_cdps\""
+    "lxc exec webserver1 -- bash -c \"export DATABASE_URL=mysql://quiz:xxxx@10.1.2.4/quiz; export QUIZ_OPEN_REGISTER=yes; cd /root/quiz_2019; npm run-script seed_cdps\"",
+    "lxc exec webserver1 -- bash -c \"mount -t glusterfs 10.1.2.5:/nas /root/quiz_2019/public/uploads\"",
+    "lxc exec webserver2 -- bash -c \"mount -t glusterfs 10.1.2.6:/nas /root/quiz_2019/public/uploads\"",
+    "lxc exec webserver3 -- bash -c \"mount -t glusterfs 10.1.2.7:/nas /root/quiz_2019/public/uploads\""
   ],
   "replication": 3
 }

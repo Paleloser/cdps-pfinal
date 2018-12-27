@@ -1,34 +1,13 @@
 {
-  "image": "This is the lxc image that will be launched.",                    
-  "name": "This is the name we want the container to have. Names are always containing a number at the end.",
-  "dependencies": [
-    "Here we set all the programs we want to install in all the containers via package manager. At the time only apt-get is enabled."
-  ],
-  "interfaces": [
-    {
-      "name": "Interface name on the container (eth0, eno1...)",
-      "network": "Network where the interface will be plugged (default => lxdbr0, else => a bridge with that name is created if it doesn't exists).",
-      "address": "If we want a static IP, this is the CIDR (AA.AA.AA.AA/MM)",
-      "gateway4": "IPv4 Gateway according to netplan.io"
-    },
-    {
-      "name": "eth0",
-      "network": "intra-lan0",
-      "address": "10.1.0.1/24"
-    }
-  ],
-  "forwarding": "true/false if we want this container to forward IP packets.",
-  "run": [
-    "List of commands we want to run on the container after installation completes. In case of replication they will be run on each container."
-  ],
-  "cmd": [
-    "List of commands we want to be run everytime the container boots up. In case of replication they will be run on each container."
-  ],
-  "env": {
-    "KEY": "VALUE. Environment variables (KEY: VALUE) applied on each container."
-  },
-  "scripts": [
-    "Literal scripts to be run after all the containers have been launched. Here we can set container-specific commands in case of replicas."
-  ],
-  "replication": "integer. If we just want a container we can wether set it to 0, 1 or ommit it. If set to 2, (p.e.) 2 containers will be created."
+  "image": "String: this is the lxc image that will be launched.",                    
+  "name": "String: this is the name we want the container to have. Names are always containing a number at the end.",
+  "priviledged": "Boolean: set to true if container config must be done under priviledged conditions",
+  "dependencies": "[String]: here we set all the programs we want to install in all the containers via package manager. At the time only apt-get is enabled.",
+  "interfaces": "[{name String, network String, address String, gateway4 String}]: see netplan.io for orientation",
+  "forwarding": "Boolean: if we want this container to forward IP packets.",
+  "run": "[String]: list of commands we want to run on the container after installation completes. In case of replication they will be run on each container.",
+  "cmd": "[String]: list of commands we want to be run everytime the container boots up. In case of replication they will be run on each container.",
+  "env": "{String: String}: list of key/value with the environment variables. Note that env variables aren't present on _lxc exec_ commands",
+  "scripts": "[String]: literal scripts to be run after all the containers have been launched. Here we can set container-specific commands in case of replicas.",
+  "replication": "Integer: If we just want a container we can wether set it to 0, 1 or ommit it. If set to 2, (p.e.) 2 containers will be created."
 }

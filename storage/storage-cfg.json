@@ -1,0 +1,27 @@
+{
+  "image": "images:ubuntu/18.04",
+  "name": "storage",
+  "privileged": true,
+  "dependencies": [
+    "net-tools",
+    "traceroute",
+    "glusterfs-server"
+  ],
+  "interfaces": [
+    {
+      "name": "eth0",
+      "network": "intra-lan2",
+      "address": "10.1.2.5/24"
+    }
+  ],
+  "scripts": [
+    "lxc exec storage1 -- bash -c  \"gluster peer probe 10.1.2.6\"",
+    "lxc exec storage1 -- bash -c  \"gluster peer probe 10.1.2.7\"",
+    "lxc exec storage1 -- bash -c  \"gluster volume create nas replica 3 10.1.2.5:/nas/ 10.1.2.6:/nas/ 10.1.2.7:/nas/ force\"",
+    "lxc exec storage1 -- bash -c  \"gluster volume start nas\"",
+    "lxc config set storage1 security.privileged false",
+    "lxc config set storage2 security.privileged false",
+    "lxc config set storage3 security.privileged false"
+  ],
+  "replication": 3
+}

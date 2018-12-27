@@ -29,6 +29,10 @@ def updateContainer(node, cfg):
   os.system('lxc exec %s -- bash -c "apt-get update 1>/dev/null"' % (node))
   os.system('lxc exec %s -- bash -c "apt-get upgrade 1>/dev/null"' % (node))
 
+def setPrivileges(node):
+  print('[%s]..Se le dan privilegios al contenedor' % (node))
+  os.system('lxc config set %s security.privileged true' % (node))
+
 def installDependencies(node, cfg):
   print('[%s]..Se instalan las dependencias' % (node))
   for dep in cfg['dependencies']:
@@ -137,6 +141,10 @@ def runScripts(cfg):
     print('[******]...Se ejecuta: %s' % (script))
     os.system('%s' % (script))
   
+def removePrivileges(node):
+  print('[%s]..Se eliminan los privilegios del contenedor' % (node))
+  os.system('lxc config set %s security.privileged false' % (node))
+
 def createSingleContainer(cfg, i):
   # node will be the variable with the container name along the process
   node="%s%s" % (cfg['name'], i+1)
@@ -145,6 +153,9 @@ def createSingleContainer(cfg, i):
   print('[%s].Se configura el contenedor' % (node))
   # apt-get update && upgrade
   updateContainer(node, cfg)
+  if 'privileged' in cfg:
+    if cfg['privileged']:
+      setPrivileges(node)
   # apt-get install [dependency]
   if 'dependencies' in cfg:
     installDependencies(node, cfg)
@@ -183,6 +194,10 @@ def createContainer(cfg):
   if 'scripts' in cfg:
     # literal commands executed ON HOST
     runScripts(cfg)
+  # remember, this was set on createContainer, we have to undo it
+  if 'privileged' in cfg:
+    if cfg['privileged']:
+      print('[******] NOTE that %s containers were created with privileges!!!! It is your responsability to turn each container privileges off!!!!' % (cfg['name']))
 
 # START
 
