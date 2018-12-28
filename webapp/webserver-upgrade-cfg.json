@@ -4,7 +4,6 @@
   "dependencies": [
     "lynx",
     "net-tools",
-    "traceroute",
     "git",
     "npm",
     "mariadb-client",

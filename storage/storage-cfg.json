@@ -4,7 +4,6 @@
   "privileged": true,
   "dependencies": [
     "net-tools",
-    "traceroute",
     "glusterfs-server"
   ],
   "interfaces": [

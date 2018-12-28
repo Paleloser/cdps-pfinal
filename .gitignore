@@ -1,2 +1,4 @@
 VNXLAB2018-v1.ova
 *.pdf
+interfaces
+scripts/lxc-py-*
