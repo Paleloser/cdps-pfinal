@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE FWObjectDatabase SYSTEM "fwbuilder.dtd">
-<FWObjectDatabase xmlns="http://www.fwbuilder.org/1.0/" version="24" lastModified="1545966347" id="root">
+<FWObjectDatabase xmlns="http://www.fwbuilder.org/1.0/" version="24" lastModified="1546000778" id="root">
   <Library id="syslib000" color="#d4f8ff" name="Standard" comment="Standard objects" ro="True">
     <AnyNetwork id="sysid0" name="Any" comment="Any Network" ro="False" address="0.0.0.0" netmask="0.0.0.0"/>
     <AnyIPService id="sysid1" protocol_num="0" name="Any" comment="Any IP Service" ro="False"/>
@@ -528,7 +528,7 @@
       <ServiceGroup id="id1609X32499" name="TagServices" comment="" ro="False"/>
     </ServiceGroup>
     <ObjectGroup id="id1610X32499" name="Firewalls" comment="" ro="False">
-      <Firewall id="id2327X32499" host_OS="linux24" lastCompiled="1545788584" lastInstalled="0" lastModified="1545966421" platform="iptables" name="natfw" comment="" ro="False">
+      <Firewall id="id2327X32499" host_OS="linux24" lastCompiled="1545788584" lastInstalled="0" lastModified="1546000992" platform="iptables" name="natfw" comment="" ro="False">
         <NAT id="id2331X32499" name="NAT" comment="" ro="False" ipv4_rule_set="False" ipv6_rule_set="False" top_rule_set="True">
           <NATRule id="id3476X22777" disabled="False" group="" position="0" action="Translate" comment="">
             <OSrc neg="False">
@@ -588,7 +588,27 @@
           <RuleSetOptions/>
         </NAT>
         <Policy id="id2329X32499" name="Policy" comment="" ro="False" ipv4_rule_set="False" ipv6_rule_set="False" top_rule_set="True">
-          <PolicyRule id="id3720X22777" disabled="False" group="" log="True" position="0" action="Accept" direction="Both" comment="">
+          <PolicyRule id="id3727X29232" disabled="False" group="" log="True" position="0" action="Accept" direction="Both" comment="">
+            <Src neg="False">
+              <ObjectRef ref="id3536X22777"/>
+            </Src>
+            <Dst neg="False">
+              <ObjectRef ref="sysid0"/>
+            </Dst>
+            <Srv neg="False">
+              <ServiceRef ref="sysid1"/>
+            </Srv>
+            <Itf neg="False">
+              <ObjectRef ref="id3672X29232"/>
+            </Itf>
+            <When neg="False">
+              <IntervalRef ref="sysid2"/>
+            </When>
+            <PolicyRuleOptions>
+              <Option name="stateless">False</Option>
+            </PolicyRuleOptions>
+          </PolicyRule>
+          <PolicyRule id="id3720X22777" disabled="False" group="" log="True" position="1" action="Accept" direction="Both" comment="">
             <Src neg="False">
               <ObjectRef ref="sysid0"/>
             </Src>
@@ -610,7 +630,7 @@
               <Option name="stateless">False</Option>
             </PolicyRuleOptions>
           </PolicyRule>
-          <PolicyRule id="id3466X711" disabled="False" group="" log="True" position="1" action="Accept" direction="Both" comment="">
+          <PolicyRule id="id3466X711" disabled="False" group="" log="True" position="2" action="Accept" direction="Both" comment="">
             <Src neg="False">
               <ObjectRef ref="sysid0"/>
             </Src>
@@ -630,7 +650,7 @@
               <Option name="stateless">False</Option>
             </PolicyRuleOptions>
           </PolicyRule>
-          <PolicyRule id="id2493X32499" disabled="False" group="" log="True" position="2" action="Accept" direction="Both" comment="">
+          <PolicyRule id="id2493X32499" disabled="False" group="" log="True" position="3" action="Accept" direction="Both" comment="">
             <Src neg="False">
               <ObjectRef ref="sysid0"/>
             </Src>
@@ -651,7 +671,7 @@
               <Option name="stateless">False</Option>
             </PolicyRuleOptions>
           </PolicyRule>
-          <PolicyRule id="id2401X32499" disabled="False" group="" log="True" position="3" action="Deny" direction="Both" comment="">
+          <PolicyRule id="id2401X32499" disabled="False" group="" log="True" position="4" action="Deny" direction="Both" comment="">
             <Src neg="False">
               <ObjectRef ref="sysid0"/>
             </Src>
@@ -682,6 +702,12 @@
         <Interface id="id2336X32499" dedicated_failover="False" dyn="False" label="inside" security_level="100" unnum="False" unprotected="False" name="eth1" comment="" ro="False">
           <IPv4 id="id2337X32499" name="natfw:eth1:ip" comment="" ro="False" address="10.1.0.1" netmask="255.255.0.0"/>
           <InterfaceOptions/>
+        </Interface>
+        <Interface id="id3672X29232" dedicated_failover="False" dyn="False" label="mgmt" mgmt="False" security_level="0" unnum="False" unprotected="False" name="eth2" comment="" ro="False">
+          <IPv4 id="id3714X29232" name="natfw:eth2:ip" comment="" ro="False" address="10.2.0.2" netmask="255.255.255.0"/>
+          <InterfaceOptions>
+            <Option name="type">ethernet</Option>
+          </InterfaceOptions>
         </Interface>
         <Management address="0.0.0.0">
           <SNMPManagement enabled="False" snmp_read_community="" snmp_write_community=""/>

@@ -10,6 +10,7 @@ from pybrctl import BridgeController
 ###################
 
 # In replication cases, only the first address is given, so we have to craft the addr of the replicas
+# returns the address of the replica in CIDR notation
 def parseAddr(addr, i):
   split1=addr.split('/')
   split2=[]
@@ -111,8 +112,23 @@ def cmd(node, cfg):
   os.system('lxc exec %s -- bash -c "chgrp root /etc/init.d/lxc-%s-on-boot.sh"' % (node, node))
   os.system('lxc exec %s -- bash -c "sudo update-rc.d lxc-%s-on-boot.sh defaults"' % (node, node))
 
+def setupServerNagios(cfg, node, i):
+  for interface in cfg['interfaces']:
+    if 'intra-mgmt' in interface['network']:
+      # we need the addr withou the mask for the config
+      fullAddress=parseAddr(interface['address'], i)
+      address=fullAddress.split('/')[0]
+      print('[%s]...Se configura nagios en servidor' % (node))
+      os.system('lxc exec nagios1 -- bash -c "echo \'define host {\' >> /usr/local/nagios/etc/servers/clients.cfg"')
+      os.system('lxc exec nagios1 -- bash -c "echo \'\tuse\tlinux-server\' >> /usr/local/nagios/etc/servers/clients.cfg"')
+      os.system('lxc exec nagios1 -- bash -c "echo \'\thost_name\t%s\' >> /usr/local/nagios/etc/servers/clients.cfg"' % (node))
+      os.system('lxc exec nagios1 -- bash -c "echo \'\talias\t%s\' >> /usr/local/nagios/etc/servers/clients.cfg"' % (node))
+      os.system('lxc exec nagios1 -- bash -c "echo \'\taddress\t%s\' >> /usr/local/nagios/etc/servers/clients.cfg"' % (address))
+      os.system('lxc exec nagios1 -- bash -c "echo \'}\' >> /usr/local/nagios/etc/servers/clients.cfg"')
+      os.system('lxc exec nagios1 -- bash -c "systemctl restart nagios"')
+
 # Se encarga de la configuracion de nagios en el cliente
-def setupNagios(cfg, node):
+def setupClientNagios(cfg, node):
   print('[%s]..Se configura nagios' % (node))
   print('[%s]...Se configura nagios en cliente' % (node))
   # instala nagios
@@ -124,14 +140,14 @@ def setupNagios(cfg, node):
   iname="eth"+str(len(cfg['interfaces']))
   cfg['interfaces'].append({"name": iname, "network": "intra-mgmt", "address": address})
   # configura los parametros del servidor nagios
-  print('[%s]...Se configura nagios en servidor' % (node))
-  os.system('lxc exec nagios1 -- bash -c "echo \'define host {\' >> /usr/local/nagios/etc/servers/clients.cfg"')
-  os.system('lxc exec nagios1 -- bash -c "echo \'\tuse\tlinux-server\' >> /usr/local/nagios/etc/servers/clients.cfg"')
-  os.system('lxc exec nagios1 -- bash -c "echo \'\thost_name\t%s\' >> /usr/local/nagios/etc/servers/clients.cfg"' % (node))
-  os.system('lxc exec nagios1 -- bash -c "echo \'\talias\t%s\' >> /usr/local/nagios/etc/servers/clients.cfg"' % (node))
-  os.system('lxc exec nagios1 -- bash -c "echo \'\taddress\t%s\' >> /usr/local/nagios/etc/servers/clients.cfg"' % (address))
-  os.system('lxc exec nagios1 -- bash -c "echo \'}\' >> /usr/local/nagios/etc/servers/clients.cfg"')
-  os.system('lxc exec nagios1 -- bash -c "systemctl restart nagios"')
+  if 'replication' in cfg:
+    for i in range(0, cfg['replication']):
+      node=cfg['name']+str(i+1)
+      setupServerNagios(cfg, node, i)
+  else: 
+    i=0
+    node=cfg['name']+str(i+1)
+    setupServerNagios(cfg, node, i)
   return cfg
 
 # Configures the networking in the host: creates necessary bridges
@@ -234,8 +250,14 @@ def createSingleContainer(cfg, i):
   # run nagios-client setupo
   if 'nagios' in cfg:
     if cfg['nagios']:
-      # check if mgmt interface is already registered!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      cfg = setupNagios(cfg, node)
+      nagiosenabled=False
+      # check if mgmt interface is already registered
+      if 'interfaces' in cfg:
+        for interface in cfg['interfaces']:
+          if 'intra-mgmt' in interface['network']:
+            nagiosenabled=True 
+      if not nagiosenabled:
+        cfg=setupClientNagios(cfg, node)
   # networking stuff should be applied at last instance to avoid isolation problems
   if 'interfaces' in cfg:
     configHostNetwork(node, cfg)
@@ -243,11 +265,12 @@ def createSingleContainer(cfg, i):
     configContainerNetwork(node, cfg)
     createNetplan(node, cfg, i)
     applyNetplan(node, cfg)
+  return cfg
 
 # Just calls createSingleContainer for each replica, passing its id
 def createReplicatedContainer(cfg, replicas):
   for i in range(0, replicas):
-    createSingleContainer(cfg, i)
+    cfg=createSingleContainer(cfg, i)
 
 ##################################
 # First function executed (main) #

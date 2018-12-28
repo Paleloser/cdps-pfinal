@@ -36,6 +36,7 @@
     "cp /usr/lib/nagios/plugins/check_* /usr/local/nagios/libexec",
     "mkdir /usr/local/nagios/etc/servers",
     "touch /usr/local/nagios/etc/servers/clients.cfg",
+    "echo \"cfg_dir=/usr/local/nagios/etc/servers\" >> /usr/local/nagios/etc/nagios.cfg",
     "sudo systemctl restart apache2.service",
     "sudo systemctl start nagios.service"
   ]
