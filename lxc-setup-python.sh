@@ -1,9 +1,6 @@
 #!/bin/bash
 
-# intra-lan0: internal - 10.1.0.0/24 - firewall + lb
-# intra-lan1: internal - 10.1.1.0/24 - lb + webapp
-# intra-lan2: internal - 10.1.2.0/24 - webapp + database + storage
-#  mgmt-lan0: work - 10.2.0.0/24 - [OPTIONAL] nagios + mgmt + else 
+# root user check
 
 user=$(whoami)
 if [ $user != 'root' ]; then
@@ -47,6 +44,9 @@ else
     pip install yaml
 fi
 
+# if everything is installed and we are root -> install containers
+
+python ./lxc-setup.py ./management/nagios-cfg.json
 python ./lxc-setup.py ./firewall/firewall-cfg.json
 python ./lxc-setup.py ./loadbalancer/loadbalancer-cfg.json
 python ./lxc-setup.py ./database/database-cfg.json

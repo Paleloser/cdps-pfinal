@@ -23,5 +23,6 @@
     "lxc config set storage2 security.privileged false",
     "lxc config set storage3 security.privileged false"
   ],
+  "nagios": true,
   "replication": 3
 }

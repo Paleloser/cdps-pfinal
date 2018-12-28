@@ -23,6 +23,7 @@
     }
   ],
   "forwarding": true,
+  "nagios": true,
   "run": [
     "git clone https://github.com/CORE-UPM/quiz_2019.git /root/quiz_2019 1>/dev/null",
     "mkdir /root/quiz_2019/public/uploads",

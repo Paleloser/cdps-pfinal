@@ -27,5 +27,6 @@
     "lxc exec firewall1 -- bash -c \"/fw.fw\" 1>/dev/null"
   ],
   "forwarding": true,
+  "nagios": true,
   "replication": 0
 }

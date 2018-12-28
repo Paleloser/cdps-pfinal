@@ -21,6 +21,29 @@ def parseAddr(addr, i):
   res=('%s.%s.%s.%s/%s' % (split2[0][0], split2[0][1], split2[0][2], split2[0][3], split2[1][0]))
   return res
 
+# kind of a dhcp implementation
+def findAvailableAddr(addr, network, start):
+  split1=addr.split('/')
+  split2=[]
+  for j in range(0, len(split1)):
+    split2.append(split1[j].split('.'))
+  # we get something like [[AA, AA, AA, AA], [MM]]
+  # we want to set pos [0][3]
+  os.system('lxc network show %s > .tmp.yaml' % (network))
+  with open('.tmp.yaml') as infile:
+    i=0
+    if start:
+      i=start
+    loaded=yaml.load(infile)
+    if loaded:
+      if 'used_by' in loaded:
+        i=len(loaded['used_by'])
+    split2[0][3]=i+1
+    addr=('%s.%s.%s.%s/%s' % (split2[0][0], split2[0][1], split2[0][2], split2[0][3], split2[1][0]))
+  infile.close()
+  os.remove('.tmp.yaml')
+  return addr
+
 ##############################################################################
 # Core functions in the order they are called along the installation process #
 ##############################################################################
@@ -87,6 +110,29 @@ def cmd(node, cfg):
   os.system('lxc exec %s -- bash -c "chown root /etc/init.d/lxc-%s-on-boot.sh"' % (node, node))
   os.system('lxc exec %s -- bash -c "chgrp root /etc/init.d/lxc-%s-on-boot.sh"' % (node, node))
   os.system('lxc exec %s -- bash -c "sudo update-rc.d lxc-%s-on-boot.sh defaults"' % (node, node))
+
+# Se encarga de la configuracion de nagios en el cliente
+def setupNagios(cfg, node):
+  print('[%s]..Se configura nagios' % (node))
+  print('[%s]...Se configura nagios en cliente' % (node))
+  # instala nagios
+  os.system('lxc exec %s -- bash -c "sudo apt-get install -y nagios-nrpe-server nagios-plugins 1>/dev/null"' % (node))
+  os.system('lxc exec %s -- bash -c "sudo sed -i /etc/nagios/nrpe.cfg -e \'s/allowed_hosts.*/allowed_hosts=0.0.0.0/\' -e \'s/utf8mb4/utf8/\'"' % (node))
+  os.system('lxc exec %s -- bash -c "sudo /etc/init.d/nagios-nrpe-server restart 1>/dev/null"' % (node))
+  # configura un dhcp/estatico de direccion ip sobre la red intra-mgmt (la red del nagios)
+  address=findAvailableAddr("10.2.0.1/24", "intra-mgmt", 1)
+  iname="eth"+str(len(cfg['interfaces']))
+  cfg['interfaces'].append({"name": iname, "network": "intra-mgmt", "address": address})
+  # configura los parametros del servidor nagios
+  print('[%s]...Se configura nagios en servidor' % (node))
+  os.system('lxc exec nagios1 -- bash -c "echo \'define host {\' >> /usr/local/nagios/etc/servers/clients.cfg"')
+  os.system('lxc exec nagios1 -- bash -c "echo \'\tuse\tlinux-server\' >> /usr/local/nagios/etc/servers/clients.cfg"')
+  os.system('lxc exec nagios1 -- bash -c "echo \'\thost_name\t%s\' >> /usr/local/nagios/etc/servers/clients.cfg"' % (node))
+  os.system('lxc exec nagios1 -- bash -c "echo \'\talias\t%s\' >> /usr/local/nagios/etc/servers/clients.cfg"' % (node))
+  os.system('lxc exec nagios1 -- bash -c "echo \'\taddress\t%s\' >> /usr/local/nagios/etc/servers/clients.cfg"' % (address))
+  os.system('lxc exec nagios1 -- bash -c "echo \'}\' >> /usr/local/nagios/etc/servers/clients.cfg"')
+  os.system('lxc exec nagios1 -- bash -c "systemctl restart nagios"')
+  return cfg
 
 # Configures the networking in the host: creates necessary bridges
 def configHostNetwork(node, cfg):
@@ -185,6 +231,11 @@ def createSingleContainer(cfg, i):
   # run-on-boot commands
   if 'cmd' in cfg:
     cmd(node, cfg)
+  # run nagios-client setupo
+  if 'nagios' in cfg:
+    if cfg['nagios']:
+      # check if mgmt interface is already registered!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      cfg = setupNagios(cfg, node)
   # networking stuff should be applied at last instance to avoid isolation problems
   if 'interfaces' in cfg:
     configHostNetwork(node, cfg)

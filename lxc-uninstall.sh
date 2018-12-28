@@ -5,6 +5,7 @@ if [ $user != 'root' ]; then
 fi
 
 echo "Borrando contenedores..."
+lxc delete nagios1 --force
 lxc delete firewall1 --force
 lxc delete loadbalancer1 --force
 lxc delete webserver1 --force
@@ -19,11 +20,13 @@ echo "Desconectando interfaces de red"
 sudo ifconfig intra-lan0 down
 sudo ifconfig intra-lan1 down
 sudo ifconfig intra-lan2 down
+sudo ifconfig intra-mgmt down
 
 echo "Borrando bridges"
 sudo brctl delbr intra-lan0
 sudo brctl delbr intra-lan1
 sudo brctl delbr intra-lan2
+sudo brctl delbr intra-mgmt
 
 echo "Borrando ficheros intermedios"
 rm ./scripts/lxc-py-*

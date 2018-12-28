@@ -23,6 +23,7 @@
     }
   ],
   "forwarding": true,
+  "nagios": true,
   "scripts": [
     "lxc file push ./scripts/haproxy.cfg loadbalancer1/etc/haproxy/haproxy.cfg",
     "lxc exec loadbalancer1 -- bash -c \"service haproxy restart\""
