@@ -57,57 +57,57 @@ def launchContainer(node, cfg):
 
 # Execs update/upgrade in the container
 def updateContainer(node, cfg):
-  logger.debug('[%s]..Se actualizan los paquetes' % (node))
+  logger.debug('%s - ..Se actualizan los paquetes' % (node))
   os.system('lxc exec %s -- bash -c "apt-get update 1>/dev/null"' % (node))
   os.system('lxc exec %s -- bash -c "apt-get upgrade 1>/dev/null"' % (node))
 
 # Gives privileges to the container (it is needed for the NAS servers)
 def setPrivileges(node):
-  logger.debug('[%s]..Se le dan privilegios al contenedor' % (node))
+  logger.debug('%s - ..Se le dan privilegios al contenedor' % (node))
   os.system('lxc config set %s security.privileged true' % (node))
 
 # Installs all the pgms needed on the container specified by 'dependencies: []'
 def installDependencies(node, cfg):
-  logger.debug('[%s]..Se instalan las dependencias' % (node))
+  logger.debug('%s - ..Se instalan las dependencias' % (node))
   for dep in cfg['dependencies']:
-    logger.debug('[%s]...Se instala %s' % (node, dep))
+    logger.debug('%s - ...Se instala %s' % (node, dep))
     os.system('lxc exec %s -- bash -c "apt-get install -y %s 1>/dev/null"' % (node, dep))
-  logger.debug('[%s]..Dependencias instaladas' % (node))
+  logger.debug('%s - ..Dependencias instaladas' % (node))
 
 # Sets the environment variables defined by 'env: {}'
 def setEnv(node, cfg):
-  logger.debug('[%s]..Se configuran las variables de entorno' % (node))
+  logger.debug('%s - ..Se configuran las variables de entorno' % (node))
   for var in cfg['env']:
-    logger.debug('[%s]...Se anade: %s=%s' % (node, var, cfg['env'][var]))
+    logger.debug('%s - ...Se anade: %s=%s' % (node, var, cfg['env'][var]))
     os.system('lxc exec %s -- bash -c \"export %s=%s\"' % (node, var, cfg['env'][var]))
     os.system('lxc exec %s -- bash -c \"echo \'export %s=%s\' >> /root/.bashrc\"' % (node, var, cfg['env'][var]))
 
 # Runs the commands in the container specified in 'run: []'
 def run(node, cfg):
-  logger.debug('[%s]..Se ejecuta la pila de run definidos' % (node))
+  logger.debug('%s - ..Se ejecuta la pila de run definidos' % (node))
   for script in cfg['run']:
-    logger.debug('[%s]...Se ejecuta: %s' % (node, script))
+    logger.debug('%s - ...Se ejecuta: %s' % (node, script))
     os.system('lxc exec %s -- bash -c "%s"' % (node, script))
 
 # Generates a script which will be executed on-boot in the container. It contains the commands specified in 'cmd: []'
 def cmd(node, cfg):
-  logger.debug('[%s]..Se genera el script a correr on-boot' % (node))
-  bootfile=open('./scripts/lxc-on-boot.sh', 'r+')
-  if os.path.exists('./scripts/lxc-py-%s-on-boot.sh' % (node)):
-    os.remove('./scripts/lxc-py-%s-on-boot.sh' % (node))
-  outfile=open('./scripts/lxc-py-%s-on-boot.sh' % (node), 'w+')
+  logger.debug('%s - ..Se genera el script a correr on-boot' % (node))
+  bootfile=open('../scripts/lxc-on-boot.sh', 'r+')
+  if os.path.exists('../scripts/lxc-py-%s-on-boot.sh' % (node)):
+    os.remove('../scripts/lxc-py-%s-on-boot.sh' % (node))
+  outfile=open('../scripts/lxc-py-%s-on-boot.sh' % (node), 'w+')
   for line in bootfile:
     if 'start)' in line:
       outfile.write(line)
       for script in cfg['cmd']:
-        logger.debug('[%s]...Se anade: %s' % (node, script))
+        logger.debug('%s - ...Se anade: %s' % (node, script))
         outfile.write('%s\n' % (script))
     else:
       outfile.write(line)
   bootfile.close()
   outfile.close()
-  logger.debug('[%s]...Se sube el script a %s/etc/init.d/' % (node, node))
-  os.system('lxc file push scripts/lxc-py-%s-on-boot.sh %s/etc/init.d/lxc-%s-on-boot.sh' % (node, node, node))
+  logger.debug('%s - ...Se sube el script a %s/etc/init.d/' % (node, node))
+  os.system('lxc file push ../scripts/lxc-py-%s-on-boot.sh %s/etc/init.d/lxc-%s-on-boot.sh' % (node, node, node))
   os.system('lxc exec %s -- bash -c "chmod 755 /etc/init.d/lxc-%s-on-boot.sh"' % (node, node))
   os.system('lxc exec %s -- bash -c "chown root /etc/init.d/lxc-%s-on-boot.sh"' % (node, node))
   os.system('lxc exec %s -- bash -c "chgrp root /etc/init.d/lxc-%s-on-boot.sh"' % (node, node))
@@ -119,7 +119,7 @@ def setupServerNagios(cfg, node, i):
       # we need the addr withou the mask for the config
       fullAddress=parseAddr(interface['address'], i)
       address=fullAddress.split('/')[0]
-      logger.debug('[%s]...Se configura nagios en servidor' % (node))
+      logger.debug('%s - ...Se configura nagios en servidor' % (node))
       os.system('lxc exec nagios1 -- bash -c "echo \'define host {\' >> /usr/local/nagios/etc/servers/clients.cfg"')
       os.system('lxc exec nagios1 -- bash -c "echo \'\tuse\tlinux-server\' >> /usr/local/nagios/etc/servers/clients.cfg"')
       os.system('lxc exec nagios1 -- bash -c "echo \'\thost_name\t%s\' >> /usr/local/nagios/etc/servers/clients.cfg"' % (node))
@@ -130,8 +130,8 @@ def setupServerNagios(cfg, node, i):
 
 # Se encarga de la configuracion de nagios en el cliente
 def setupClientNagios(cfg, node):
-  logger.debug('[%s]..Se configura nagios' % (node))
-  logger.debug('[%s]...Se configura nagios en cliente' % (node))
+  logger.debug('%s - ..Se configura nagios' % (node))
+  logger.debug('%s - ...Se configura nagios en cliente' % (node))
   # instala nagios
   os.system('lxc exec %s -- bash -c "sudo apt-get install -y nagios-nrpe-server nagios-plugins 1>/dev/null"' % (node))
   os.system('lxc exec %s -- bash -c "sudo sed -i /etc/nagios/nrpe.cfg -e \'s/allowed_hosts.*/allowed_hosts=0.0.0.0/\' -e \'s/utf8mb4/utf8/\'"' % (node))
@@ -153,46 +153,46 @@ def setupClientNagios(cfg, node):
 
 # Configures the networking in the host: creates necessary bridges
 def configHostNetwork(node, cfg):
-  logger.debug('[%s]..Se configuran las redes necesarias en host' % (node))
+  logger.debug('%s - ..Se configuran las redes necesarias en host' % (node))
   for interface in cfg['interfaces']:
     if interface['network'] != 'default':
       try:
         brctl.getbr(interface['network'])
-        logger.debug('[%s]...Red %s ya existe, no se hace nada' % (node, interface['network']))
+        logger.debug('%s - ...Red %s ya existe, no se hace nada' % (node, interface['network']))
       except Exception:
-        logger.debug('[%s]...Red %s no existe, se crea el bridge' % (node, interface['network']))
+        logger.debug('%s - ...Red %s no existe, se crea el bridge' % (node, interface['network']))
         brctl.addbr(interface['network'])
 
 # Sets defult network.manager to ifupdown (/etc/network/interfaces)
 def configNetplan(node, cfg):
   if ('18' in cfg['image']) or ('bionic' in cfg['image']):
-    logger.debug('[******] Imagen detectada como ubuntu:18.04. Instalamos ifupdown.')
+    logger.debug('****** -  Imagen detectada como ubuntu:18.04. Instalamos ifupdown.')
     os.system('lxc exec %s -- bash -c "apt-get install -y ifupdown 1>/dev/null"' % (node))
     os.system('lxc exec %s -- bash -c "apt-get purge -y netplan.io 1>/dev/null"' % (node))
 
 # Configures the networking in the container: attaches bridges to container for network isolation
 def configContainerNetwork(node, cfg):
-  logger.debug('[%s]..Se configuran las interfaces de red' % (node))
-  logger.debug('[%s]..Se para el contenedor' % (node))
+  logger.debug('%s - ..Se configuran las interfaces de red' % (node))
+  logger.debug('%s - ..Se para el contenedor' % (node))
   os.system('lxc stop %s 1>/dev/null' % (node))
   for interface in cfg['interfaces']:
     if interface['network'] == 'default':
       continue
     else:
-      logger.debug('[%s]...Se anade la red %s a la interfaz %s' % (node, interface['network'], interface['name']))
+      logger.debug('%s - ...Se anade la red %s a la interfaz %s' % (node, interface['network'], interface['name']))
       os.system('lxc network attach %s %s %s' % (interface['network'], node, interface['name']))
-  logger.debug('[%s]..Se inicia el contenedor' % (node))
+  logger.debug('%s - ..Se inicia el contenedor' % (node))
   os.system('lxc start %s 1>/dev/null' % (node))
 
 # Configures the internal networking in the container (/etc/network/interfaces script)
 def createNetplan(node, cfg, i):
-  logger.debug('[%s]..Se crea el plan de red' % (node))
+  logger.debug('%s - ..Se crea el plan de red' % (node))
   with open('interfaces', 'w') as outfile:
     outfile.write('auto lo\n')
     outfile.write('iface lo inet loopback\n')
     outfile.write('\n')
     for interface in cfg['interfaces']:
-      logger.debug('[%s]...Se configura %s' % (node, interface['name']))
+      logger.debug('%s - ...Se configura %s' % (node, interface['name']))
       if interface['network'] == 'default':
         outfile.write('auto %s\n' % (interface['name']))
         outfile.write('iface %s inet dhcp\n' % (interface['name']))
@@ -211,28 +211,29 @@ def createNetplan(node, cfg, i):
 
 # Pushes the generated network script to the containet and loads it
 def applyNetplan(node, cfg):
-  logger.debug('[%s]..Se aplica el plan de red' % (node))
+  logger.debug('%s - ..Se aplica el plan de red' % (node))
   os.system('lxc file push ./interfaces %s/etc/network/' % (node))
+  os.remove('interfaces')
   os.system('lxc exec %s -- bash -c "sudo service network-manager restart" 1>/dev/null' % (node))
   if 'forwarding' in cfg:
     if cfg['forwarding']:
-      logger.debug('[%s]...Se habilita redireccionamiento IP' % (node))
+      logger.warning('%s - ...Se habilita redireccionamiento IP' % (node))
       os.system('lxc exec %s -- bash -c \"echo \'net.ipv4.ip_forward = 1\' >> /etc/sysctl.conf\"' % (node))
 
 # Runs literal scripts ON HOST defined by 'scripts: []'
 def runScripts(cfg):
-  logger.debug('[******]..Se ejecuta la pila de scripts literales definidos')
+  logger.debug('****** - ..Se ejecuta la pila de scripts literales definidos')
   for script in cfg['scripts']:
-    logger.debug('[******]...Se ejecuta: %s' % (script))
+    logger.debug('****** - ...Se ejecuta: %s' % (script))
     os.system('%s' % (script))
 
 # Creates a single container defined by its configuration (cfg) and its id (i)
 def createSingleContainer(cfg, i):
   # node will be the variable with the container name along the process
   node="%s%s" % (cfg['name'], i+1)
-  logger.debug('[%s].Se crea el contenedor' % (node))
+  logger.debug('%s - .Se crea el contenedor' % (node))
   launchContainer(node, cfg)
-  logger.debug('[%s].Se configura el contenedor' % (node))
+  logger.debug('%s - .Se configura el contenedor' % (node))
   updateContainer(node, cfg)
   if 'privileged' in cfg:
     if cfg['privileged']:
@@ -294,7 +295,7 @@ def createContainer(cfg):
   # remember, this was set on createContainer, we have to undo it
   if 'privileged' in cfg:
     if cfg['privileged']:
-      logger.warning('[******] NOTE that %s containers were created with privileges!!!! It is your responsability to turn each container privileges off!!!!' % (cfg['name']))
+      logger.warning('****** -  NOTE that %s containers were created with privileges!!!! It is your responsability to turn each container privileges off!!!!' % (cfg['name']))
 
 #########
 # START #
@@ -309,7 +310,7 @@ cfg=json.load(fopen)
 brctl = BridgeController()
 
 # Set logger
-logging.basicConfig(stream=sys.stdout, filename='registro.log', format='%(asctime)s - %(levelname)s - %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', level=logging.DEBUG)
+logging.basicConfig(stream=sys.stdout, filename='../logs/registro.log', format='%(asctime)s - %(levelname)s - %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', level=logging.DEBUG)
 logger = logging.getLogger('pfinal')
 handler = logging.StreamHandler(sys.stdout)
 handler.setLevel(logging.DEBUG)

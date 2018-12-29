@@ -30,8 +30,6 @@
     "cd /tmp/nagioscore-nagios-4.4.1/; sudo make install-webconf 1>/dev/null",
     "sudo a2enmod rewrite 1>/dev/null",
     "sudo a2enmod cgi 1>/dev/null",
-    "sudo ufw allow Apache",
-    "sudo ufw reload",
     "echo \"admin\" | htpasswd -c -i /usr/local/nagios/etc/htpasswd.users nagiosadmin",
     "cp /usr/lib/nagios/plugins/check_* /usr/local/nagios/libexec",
     "mkdir /usr/local/nagios/etc/servers",

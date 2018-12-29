@@ -24,7 +24,7 @@ En primer lugar este fichero hará un control sobre las dependencias mínimas ne
 
 Después generará el entorno de red que se pide en la práctica, con ligeras modificaciones de notación:
 
-![diagram](diagrama.png)
+![diagram](assets/diagrama.png)
 
 Para usarlo sólo habrá que hacer:
 

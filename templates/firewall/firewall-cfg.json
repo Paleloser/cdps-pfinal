@@ -25,7 +25,7 @@
     "/fw.fw"
   ],
   "scripts": [
-    "lxc file push firewall/firewall.fwb firewall1/ 1>/dev/null",
+    "lxc file push ../templates/firewall/firewall.fwb firewall1/ 1>/dev/null",
     "lxc exec firewall1 -- bash -c \"fwb_ipt -v -f /firewall.fwb -d / -o fw.fw -i id2327X32499\" 1>/dev/null",
     "lxc exec firewall1 -- bash -c \"/fw.fw\" 1>/dev/null"
   ],

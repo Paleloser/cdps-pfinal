@@ -1,0 +1,708 @@
+12/28/2018 08:59:16 PM - DEBUG - nagios1 -  .Se crea el contenedor
+12/28/2018 08:59:23 PM - DEBUG - nagios1 -  .Se configura el contenedor
+12/28/2018 08:59:23 PM - DEBUG - nagios1 -  ..Se actualizan los paquetes
+12/28/2018 08:59:30 PM - DEBUG - nagios1 -  ..Se instalan las dependencias
+12/28/2018 08:59:30 PM - DEBUG - nagios1 -  ...Se instala lynx
+12/28/2018 08:59:32 PM - DEBUG - nagios1 -  ...Se instala net-tools
+12/28/2018 08:59:33 PM - DEBUG - nagios1 -  ...Se instala traceroute
+12/28/2018 08:59:34 PM - DEBUG - nagios1 -  ...Se instala nmap
+12/28/2018 08:59:47 PM - DEBUG - nagios1 -  ...Se instala autoconf gcc libc6 make wget unzip apache2 php libapache2-mod-php7.0 libgd2-xpm-dev
+12/28/2018 09:00:43 PM - DEBUG - nagios1 -  ...Se instala nagios-plugins
+12/28/2018 09:01:06 PM - DEBUG - nagios1 -  ..Dependencias instaladas
+12/28/2018 09:01:06 PM - DEBUG - nagios1 -  ..Se ejecuta la pila de run definidos
+12/28/2018 09:01:06 PM - DEBUG - nagios1 -  ...Se ejecuta: cd /tmp; wget -O nagioscore.tar.gz https://github.com/NagiosEnterprises/nagioscore/archive/nagios-4.4.1.tar.gz 1>/dev/null
+12/28/2018 09:01:08 PM - DEBUG - nagios1 -  ...Se ejecuta: cd /tmp; tar xzf nagioscore.tar.gz
+12/28/2018 09:01:09 PM - DEBUG - nagios1 -  ...Se ejecuta: cd /tmp/nagioscore-nagios-4.4.1/; sudo ./configure --with-httpd-conf=/etc/apache2/sites-enabled 1>/dev/null
+12/28/2018 09:01:13 PM - DEBUG - nagios1 -  ...Se ejecuta: cd /tmp/nagioscore-nagios-4.4.1/; sudo make all 1>/dev/null
+12/28/2018 09:01:43 PM - DEBUG - nagios1 -  ...Se ejecuta: cd /tmp/nagioscore-nagios-4.4.1/; sudo make install-groups-users 1>/dev/null
+12/28/2018 09:01:43 PM - DEBUG - nagios1 -  ...Se ejecuta: cd /tmp/nagioscore-nagios-4.4.1/; sudo usermod -a -G nagios www-data
+12/28/2018 09:01:43 PM - DEBUG - nagios1 -  ...Se ejecuta: cd /tmp/nagioscore-nagios-4.4.1/; sudo make install 1>/dev/null
+12/28/2018 09:01:45 PM - DEBUG - nagios1 -  ...Se ejecuta: cd /tmp/nagioscore-nagios-4.4.1/; sudo make install-daemoninit 1>/dev/null
+12/28/2018 09:01:45 PM - DEBUG - nagios1 -  ...Se ejecuta: cd /tmp/nagioscore-nagios-4.4.1/; sudo make install-commandmode 1>/dev/null
+12/28/2018 09:01:45 PM - DEBUG - nagios1 -  ...Se ejecuta: cd /tmp/nagioscore-nagios-4.4.1/; sudo make install-config 1>/dev/null
+12/28/2018 09:01:45 PM - DEBUG - nagios1 -  ...Se ejecuta: cd /tmp/nagioscore-nagios-4.4.1/; sudo make install-webconf 1>/dev/null
+12/28/2018 09:01:45 PM - DEBUG - nagios1 -  ...Se ejecuta: sudo a2enmod rewrite 1>/dev/null
+12/28/2018 09:01:45 PM - DEBUG - nagios1 -  ...Se ejecuta: sudo a2enmod cgi 1>/dev/null
+12/28/2018 09:01:45 PM - DEBUG - nagios1 -  ...Se ejecuta: echo "admin" | htpasswd -c -i /usr/local/nagios/etc/htpasswd.users nagiosadmin
+12/28/2018 09:01:45 PM - DEBUG - nagios1 -  ...Se ejecuta: cp /usr/lib/nagios/plugins/check_* /usr/local/nagios/libexec
+12/28/2018 09:01:45 PM - DEBUG - nagios1 -  ...Se ejecuta: mkdir /usr/local/nagios/etc/servers
+12/28/2018 09:01:45 PM - DEBUG - nagios1 -  ...Se ejecuta: touch /usr/local/nagios/etc/servers/clients.cfg
+12/28/2018 09:01:45 PM - DEBUG - nagios1 -  ...Se ejecuta: echo "cfg_dir=/usr/local/nagios/etc/servers" >> /usr/local/nagios/etc/nagios.cfg
+12/28/2018 09:01:45 PM - DEBUG - nagios1 -  ...Se ejecuta: sudo systemctl restart apache2.service
+12/28/2018 09:01:48 PM - DEBUG - nagios1 -  ...Se ejecuta: sudo systemctl start nagios.service
+12/28/2018 09:01:48 PM - DEBUG - nagios1 -  ..Se configuran las redes necesarias en host
+12/28/2018 09:01:48 PM - DEBUG - nagios1 -  ...Red intra-mgmt no existe, se crea el bridge
+12/28/2018 09:01:48 PM - DEBUG - nagios1 -  ..Se configuran las interfaces de red
+12/28/2018 09:01:48 PM - DEBUG - nagios1 -  ..Se para el contenedor
+12/28/2018 09:01:52 PM - DEBUG - nagios1 -  ...Se anade la red intra-mgmt a la interfaz eth0
+12/28/2018 09:01:52 PM - DEBUG - nagios1 -  ..Se inicia el contenedor
+12/28/2018 09:01:52 PM - DEBUG - nagios1 -  ..Se crea el plan de red
+12/28/2018 09:01:52 PM - DEBUG - nagios1 -  ...Se configura eth0
+12/28/2018 09:01:52 PM - DEBUG - nagios1 -  ..Se aplica el plan de red
+12/28/2018 09:01:52 PM - DEBUG - firewall1 -  .Se crea el contenedor
+12/28/2018 09:01:59 PM - DEBUG - firewall1 -  .Se configura el contenedor
+12/28/2018 09:01:59 PM - DEBUG - firewall1 -  ..Se actualizan los paquetes
+12/28/2018 09:02:01 PM - DEBUG - firewall1 -  ..Se instalan las dependencias
+12/28/2018 09:02:01 PM - DEBUG - firewall1 -  ...Se instala lynx
+12/28/2018 09:02:02 PM - DEBUG - firewall1 -  ...Se instala net-tools
+12/28/2018 09:02:04 PM - DEBUG - firewall1 -  ...Se instala tcpdump
+12/28/2018 09:02:05 PM - DEBUG - firewall1 -  ...Se instala traceroute
+12/28/2018 09:02:06 PM - DEBUG - firewall1 -  ...Se instala nmap
+12/28/2018 09:02:09 PM - DEBUG - firewall1 -  ...Se instala fwbuilder
+12/28/2018 09:02:58 PM - DEBUG - firewall1 -  ...Se instala iptables
+12/28/2018 09:03:00 PM - DEBUG - firewall1 -  ..Dependencias instaladas
+12/28/2018 09:03:00 PM - DEBUG - firewall1 -  ..Se genera el script a correr on-boot
+12/28/2018 09:03:00 PM - DEBUG - firewall1 -  ...Se anade: /fw.fw
+12/28/2018 09:03:00 PM - DEBUG - firewall1 -  ...Se sube el script a firewall1/etc/init.d/
+12/28/2018 09:03:00 PM - DEBUG - firewall1 -  ..Se configura nagios
+12/28/2018 09:03:00 PM - DEBUG - firewall1 -  ...Se configura nagios en cliente
+12/28/2018 09:03:28 PM - DEBUG - firewall1 -  ..Se configuran las redes necesarias en host
+12/28/2018 09:03:28 PM - DEBUG - firewall1 -  ...Red intra-lan0 no existe, se crea el bridge
+12/28/2018 09:03:28 PM - DEBUG - firewall1 -  ...Red intra-mgmt ya existe, no se hace nada
+12/28/2018 09:03:28 PM - DEBUG - ****** -  Imagen detectada como ubuntu:18.04. Instalamos ifupdown.
+12/28/2018 09:03:31 PM - DEBUG - firewall1 -  ..Se configuran las interfaces de red
+12/28/2018 09:03:31 PM - DEBUG - firewall1 -  ..Se para el contenedor
+12/28/2018 09:03:32 PM - DEBUG - firewall1 -  ...Se anade la red intra-lan0 a la interfaz eth1
+12/28/2018 09:03:32 PM - DEBUG - firewall1 -  ...Se anade la red intra-mgmt a la interfaz eth2
+12/28/2018 09:03:32 PM - DEBUG - firewall1 -  ..Se inicia el contenedor
+12/28/2018 09:03:33 PM - DEBUG - firewall1 -  ..Se crea el plan de red
+12/28/2018 09:03:33 PM - DEBUG - firewall1 -  ...Se configura eth0
+12/28/2018 09:03:33 PM - DEBUG - firewall1 -  ...Se configura eth1
+12/28/2018 09:03:33 PM - DEBUG - firewall1 -  ...Se configura eth2
+12/28/2018 09:03:33 PM - DEBUG - firewall1 -  ..Se aplica el plan de red
+12/28/2018 09:03:33 PM - DEBUG - firewall1 -  ...Se habilita redireccionamiento IP
+12/28/2018 09:03:33 PM - DEBUG - ****** - ..Se ejecuta la pila de scripts literales definidos
+12/28/2018 09:03:33 PM - DEBUG - ****** - ...Se ejecuta: lxc file push ../templates/firewall/firewall.fwb firewall1/ 1>/dev/null
+12/28/2018 09:03:33 PM - DEBUG - ****** - ...Se ejecuta: lxc exec firewall1 -- bash -c "fwb_ipt -v -f /firewall.fwb -d / -o fw.fw -i id2327X32499" 1>/dev/null
+12/28/2018 09:03:33 PM - DEBUG - ****** - ...Se ejecuta: lxc exec firewall1 -- bash -c "/fw.fw" 1>/dev/null
+12/28/2018 09:03:34 PM - DEBUG - loadbalancer1 -  .Se crea el contenedor
+12/28/2018 09:03:41 PM - DEBUG - loadbalancer1 -  .Se configura el contenedor
+12/28/2018 09:03:41 PM - DEBUG - loadbalancer1 -  ..Se actualizan los paquetes
+12/28/2018 09:03:42 PM - DEBUG - loadbalancer1 -  ..Se instalan las dependencias
+12/28/2018 09:03:42 PM - DEBUG - loadbalancer1 -  ...Se instala lynx
+12/28/2018 09:03:44 PM - DEBUG - loadbalancer1 -  ...Se instala net-tools
+12/28/2018 09:03:45 PM - DEBUG - loadbalancer1 -  ...Se instala tcpdump
+12/28/2018 09:03:47 PM - DEBUG - loadbalancer1 -  ...Se instala traceroute
+12/28/2018 09:03:48 PM - DEBUG - loadbalancer1 -  ...Se instala nmap
+12/28/2018 09:03:51 PM - DEBUG - loadbalancer1 -  ...Se instala haproxy
+12/28/2018 09:03:53 PM - DEBUG - loadbalancer1 -  ..Dependencias instaladas
+12/28/2018 09:03:53 PM - DEBUG - loadbalancer1 -  ..Se configura nagios
+12/28/2018 09:03:53 PM - DEBUG - loadbalancer1 -  ...Se configura nagios en cliente
+12/28/2018 09:04:26 PM - DEBUG - loadbalancer1 -  ...Se configura nagios en servidor
+12/28/2018 09:04:26 PM - DEBUG - loadbalancer1 -  ..Se configuran las redes necesarias en host
+12/28/2018 09:04:26 PM - DEBUG - loadbalancer1 -  ...Red intra-lan0 ya existe, no se hace nada
+12/28/2018 09:04:26 PM - DEBUG - loadbalancer1 -  ...Red intra-lan1 no existe, se crea el bridge
+12/28/2018 09:04:26 PM - DEBUG - loadbalancer1 -  ...Red intra-mgmt ya existe, no se hace nada
+12/28/2018 09:04:26 PM - DEBUG - ****** -  Imagen detectada como ubuntu:18.04. Instalamos ifupdown.
+12/28/2018 09:04:30 PM - DEBUG - loadbalancer1 -  ..Se configuran las interfaces de red
+12/28/2018 09:04:30 PM - DEBUG - loadbalancer1 -  ..Se para el contenedor
+12/28/2018 09:04:30 PM - DEBUG - loadbalancer1 -  ...Se anade la red intra-lan0 a la interfaz eth0
+12/28/2018 09:04:30 PM - DEBUG - loadbalancer1 -  ...Se anade la red intra-lan1 a la interfaz eth1
+12/28/2018 09:04:30 PM - DEBUG - loadbalancer1 -  ...Se anade la red intra-mgmt a la interfaz eth2
+12/28/2018 09:04:31 PM - DEBUG - loadbalancer1 -  ..Se inicia el contenedor
+12/28/2018 09:04:31 PM - DEBUG - loadbalancer1 -  ..Se crea el plan de red
+12/28/2018 09:04:31 PM - DEBUG - loadbalancer1 -  ...Se configura eth0
+12/28/2018 09:04:31 PM - DEBUG - loadbalancer1 -  ...Se configura eth1
+12/28/2018 09:04:31 PM - DEBUG - loadbalancer1 -  ...Se configura eth2
+12/28/2018 09:04:31 PM - DEBUG - loadbalancer1 -  ..Se aplica el plan de red
+12/28/2018 09:04:31 PM - DEBUG - loadbalancer1 -  ...Se habilita redireccionamiento IP
+12/28/2018 09:04:31 PM - DEBUG - ****** - ..Se ejecuta la pila de scripts literales definidos
+12/28/2018 09:04:31 PM - DEBUG - ****** - ...Se ejecuta: lxc file push ../scripts/haproxy.cfg loadbalancer1/etc/haproxy/haproxy.cfg
+12/28/2018 09:04:31 PM - DEBUG - ****** - ...Se ejecuta: lxc exec loadbalancer1 -- bash -c "service haproxy restart"
+12/28/2018 09:04:31 PM - DEBUG - database1 -  .Se crea el contenedor
+12/28/2018 09:04:38 PM - DEBUG - database1 -  .Se configura el contenedor
+12/28/2018 09:04:38 PM - DEBUG - database1 -  ..Se actualizan los paquetes
+12/28/2018 09:04:40 PM - DEBUG - database1 -  ..Se instalan las dependencias
+12/28/2018 09:04:40 PM - DEBUG - database1 -  ...Se instala mariadb-server
+12/28/2018 09:05:08 PM - DEBUG - database1 -  ..Dependencias instaladas
+12/28/2018 09:05:08 PM - DEBUG - database1 -  ..Se ejecuta la pila de run definidos
+12/28/2018 09:05:08 PM - DEBUG - database1 -  ...Se ejecuta: sudo sed -i /etc/mysql/mariadb.conf.d/50-server.cnf -e 's/bind-address.*/bind-address=0.0.0.0/' -e 's/utf8mb4/utf8/'
+12/28/2018 09:05:08 PM - DEBUG - database1 -  ...Se ejecuta: sudo systemctl restart mysql
+12/28/2018 09:05:11 PM - DEBUG - database1 -  ...Se ejecuta: sudo mysqladmin -u root password xxxx
+12/28/2018 09:05:11 PM - DEBUG - database1 -  ...Se ejecuta: sudo mysql -u root --password=xxxx -e \"CREATE USER 'quiz' IDENTIFIED BY 'xxxx';\"
+12/28/2018 09:05:11 PM - DEBUG - database1 -  ...Se ejecuta: sudo mysql -u root --password=xxxx -e \"CREATE DATABASE quiz;\"
+12/28/2018 09:05:11 PM - DEBUG - database1 -  ...Se ejecuta: sudo mysql -u root --password=xxxx -e \"GRANT ALL PRIVILEGES ON quiz.* to 'quiz'@'localhost' IDENTIFIED BY 'xxxx';\"
+12/28/2018 09:05:11 PM - DEBUG - database1 -  ...Se ejecuta: sudo mysql -u root --password=xxxx -e \"GRANT ALL PRIVILEGES ON quiz.* to 'quiz'@'%' IDENTIFIED BY 'xxxx';\"
+12/28/2018 09:05:11 PM - DEBUG - database1 -  ...Se ejecuta: sudo mysql -u root --password=xxxx -e \"FLUSH PRIVILEGES;\"
+12/28/2018 09:05:11 PM - DEBUG - database1 -  ...Se ejecuta: sudo systemctl restart mysql
+12/28/2018 09:05:15 PM - DEBUG - database1 -  ..Se configura nagios
+12/28/2018 09:05:15 PM - DEBUG - database1 -  ...Se configura nagios en cliente
+12/28/2018 09:05:43 PM - DEBUG - database1 -  ...Se configura nagios en servidor
+12/28/2018 09:05:44 PM - DEBUG - database1 -  ..Se configuran las redes necesarias en host
+12/28/2018 09:05:44 PM - DEBUG - database1 -  ...Red intra-lan2 no existe, se crea el bridge
+12/28/2018 09:05:44 PM - DEBUG - database1 -  ...Red intra-mgmt ya existe, no se hace nada
+12/28/2018 09:05:44 PM - DEBUG - ****** -  Imagen detectada como ubuntu:18.04. Instalamos ifupdown.
+12/28/2018 09:05:47 PM - DEBUG - database1 -  ..Se configuran las interfaces de red
+12/28/2018 09:05:47 PM - DEBUG - database1 -  ..Se para el contenedor
+12/28/2018 09:05:50 PM - DEBUG - database1 -  ...Se anade la red intra-lan2 a la interfaz eth0
+12/28/2018 09:05:50 PM - DEBUG - database1 -  ...Se anade la red intra-mgmt a la interfaz eth1
+12/28/2018 09:05:50 PM - DEBUG - database1 -  ..Se inicia el contenedor
+12/28/2018 09:05:50 PM - DEBUG - database1 -  ..Se crea el plan de red
+12/28/2018 09:05:50 PM - DEBUG - database1 -  ...Se configura eth0
+12/28/2018 09:05:50 PM - DEBUG - database1 -  ...Se configura eth1
+12/28/2018 09:05:50 PM - DEBUG - database1 -  ..Se aplica el plan de red
+12/28/2018 09:05:51 PM - DEBUG - storage1 -  .Se crea el contenedor
+12/28/2018 09:05:57 PM - DEBUG - storage1 -  .Se configura el contenedor
+12/28/2018 09:05:57 PM - DEBUG - storage1 -  ..Se actualizan los paquetes
+12/28/2018 09:05:59 PM - DEBUG - storage1 -  ..Se le dan privilegios al contenedor
+12/28/2018 09:05:59 PM - DEBUG - storage1 -  ..Se instalan las dependencias
+12/28/2018 09:05:59 PM - DEBUG - storage1 -  ...Se instala net-tools
+12/28/2018 09:05:59 PM - DEBUG - storage1 -  ...Se instala glusterfs-server
+12/28/2018 09:06:25 PM - DEBUG - storage1 -  ..Dependencias instaladas
+12/28/2018 09:06:25 PM - DEBUG - storage1 -  ..Se configura nagios
+12/28/2018 09:06:25 PM - DEBUG - storage1 -  ...Se configura nagios en cliente
+12/28/2018 09:06:49 PM - DEBUG - storage1 -  ...Se configura nagios en servidor
+12/28/2018 09:06:50 PM - DEBUG - storage2 -  ...Se configura nagios en servidor
+12/28/2018 09:06:50 PM - DEBUG - storage3 -  ...Se configura nagios en servidor
+12/28/2018 09:06:50 PM - DEBUG - storage1 -  ..Se configuran las redes necesarias en host
+12/28/2018 09:06:50 PM - DEBUG - storage1 -  ...Red intra-lan2 ya existe, no se hace nada
+12/28/2018 09:06:50 PM - DEBUG - storage1 -  ...Red intra-mgmt ya existe, no se hace nada
+12/28/2018 09:06:50 PM - DEBUG - storage1 -  ..Se configuran las interfaces de red
+12/28/2018 09:06:50 PM - DEBUG - storage1 -  ..Se para el contenedor
+12/28/2018 09:06:52 PM - DEBUG - storage1 -  ...Se anade la red intra-lan2 a la interfaz eth0
+12/28/2018 09:06:52 PM - DEBUG - storage1 -  ...Se anade la red intra-mgmt a la interfaz eth1
+12/28/2018 09:06:52 PM - DEBUG - storage1 -  ..Se inicia el contenedor
+12/28/2018 09:06:53 PM - DEBUG - storage1 -  ..Se crea el plan de red
+12/28/2018 09:06:53 PM - DEBUG - storage1 -  ...Se configura eth0
+12/28/2018 09:06:53 PM - DEBUG - storage1 -  ...Se configura eth1
+12/28/2018 09:06:53 PM - DEBUG - storage1 -  ..Se aplica el plan de red
+12/28/2018 09:06:54 PM - DEBUG - storage2 -  .Se crea el contenedor
+12/28/2018 09:07:00 PM - DEBUG - storage2 -  .Se configura el contenedor
+12/28/2018 09:07:00 PM - DEBUG - storage2 -  ..Se actualizan los paquetes
+12/28/2018 09:07:02 PM - DEBUG - storage2 -  ..Se le dan privilegios al contenedor
+12/28/2018 09:07:02 PM - DEBUG - storage2 -  ..Se instalan las dependencias
+12/28/2018 09:07:02 PM - DEBUG - storage2 -  ...Se instala net-tools
+12/28/2018 09:07:03 PM - DEBUG - storage2 -  ...Se instala glusterfs-server
+12/28/2018 09:07:28 PM - DEBUG - storage2 -  ..Dependencias instaladas
+12/28/2018 09:07:28 PM - DEBUG - storage2 -  ..Se configuran las redes necesarias en host
+12/28/2018 09:07:28 PM - DEBUG - storage2 -  ...Red intra-lan2 ya existe, no se hace nada
+12/28/2018 09:07:28 PM - DEBUG - storage2 -  ...Red intra-mgmt ya existe, no se hace nada
+12/28/2018 09:07:28 PM - DEBUG - storage2 -  ..Se configuran las interfaces de red
+12/28/2018 09:07:28 PM - DEBUG - storage2 -  ..Se para el contenedor
+12/28/2018 09:07:30 PM - DEBUG - storage2 -  ...Se anade la red intra-lan2 a la interfaz eth0
+12/28/2018 09:07:30 PM - DEBUG - storage2 -  ...Se anade la red intra-mgmt a la interfaz eth1
+12/28/2018 09:07:30 PM - DEBUG - storage2 -  ..Se inicia el contenedor
+12/28/2018 09:07:31 PM - DEBUG - storage2 -  ..Se crea el plan de red
+12/28/2018 09:07:31 PM - DEBUG - storage2 -  ...Se configura eth0
+12/28/2018 09:07:31 PM - DEBUG - storage2 -  ...Se configura eth1
+12/28/2018 09:07:31 PM - DEBUG - storage2 -  ..Se aplica el plan de red
+12/28/2018 09:07:32 PM - DEBUG - storage3 -  .Se crea el contenedor
+12/28/2018 09:07:38 PM - DEBUG - storage3 -  .Se configura el contenedor
+12/28/2018 09:07:38 PM - DEBUG - storage3 -  ..Se actualizan los paquetes
+12/28/2018 09:07:40 PM - DEBUG - storage3 -  ..Se le dan privilegios al contenedor
+12/28/2018 09:07:40 PM - DEBUG - storage3 -  ..Se instalan las dependencias
+12/28/2018 09:07:40 PM - DEBUG - storage3 -  ...Se instala net-tools
+12/28/2018 09:07:40 PM - DEBUG - storage3 -  ...Se instala glusterfs-server
+12/28/2018 09:08:07 PM - DEBUG - storage3 -  ..Dependencias instaladas
+12/28/2018 09:08:07 PM - DEBUG - storage3 -  ..Se configuran las redes necesarias en host
+12/28/2018 09:08:07 PM - DEBUG - storage3 -  ...Red intra-lan2 ya existe, no se hace nada
+12/28/2018 09:08:07 PM - DEBUG - storage3 -  ...Red intra-mgmt ya existe, no se hace nada
+12/28/2018 09:08:07 PM - DEBUG - storage3 -  ..Se configuran las interfaces de red
+12/28/2018 09:08:07 PM - DEBUG - storage3 -  ..Se para el contenedor
+12/28/2018 09:08:09 PM - DEBUG - storage3 -  ...Se anade la red intra-lan2 a la interfaz eth0
+12/28/2018 09:08:09 PM - DEBUG - storage3 -  ...Se anade la red intra-mgmt a la interfaz eth1
+12/28/2018 09:08:09 PM - DEBUG - storage3 -  ..Se inicia el contenedor
+12/28/2018 09:08:10 PM - DEBUG - storage3 -  ..Se crea el plan de red
+12/28/2018 09:08:10 PM - DEBUG - storage3 -  ...Se configura eth0
+12/28/2018 09:08:10 PM - DEBUG - storage3 -  ...Se configura eth1
+12/28/2018 09:08:10 PM - DEBUG - storage3 -  ..Se aplica el plan de red
+12/28/2018 09:08:10 PM - DEBUG - ****** - ..Se ejecuta la pila de scripts literales definidos
+12/28/2018 09:08:10 PM - DEBUG - ****** - ...Se ejecuta: lxc exec storage1 -- bash -c  "gluster peer probe 10.1.2.6"
+12/28/2018 09:08:10 PM - DEBUG - ****** - ...Se ejecuta: lxc exec storage1 -- bash -c  "gluster peer probe 10.1.2.7"
+12/28/2018 09:08:11 PM - DEBUG - ****** - ...Se ejecuta: lxc exec storage1 -- bash -c  "gluster volume create nas replica 3 10.1.2.5:/nas/ 10.1.2.6:/nas/ 10.1.2.7:/nas/ force"
+12/28/2018 09:08:12 PM - DEBUG - ****** - ...Se ejecuta: lxc exec storage1 -- bash -c  "gluster volume start nas"
+12/28/2018 09:08:13 PM - DEBUG - ****** - ...Se ejecuta: lxc config set storage1 security.privileged false
+12/28/2018 09:08:13 PM - DEBUG - ****** - ...Se ejecuta: lxc config set storage2 security.privileged false
+12/28/2018 09:08:13 PM - DEBUG - ****** - ...Se ejecuta: lxc config set storage3 security.privileged false
+12/28/2018 09:08:13 PM - WARNING - ****** -  NOTE that storage containers were created with privileges!!!! It is your responsability to turn each container privileges off!!!!
+12/28/2018 09:08:13 PM - DEBUG - webserver1 -  .Se crea el contenedor
+12/28/2018 09:08:20 PM - DEBUG - webserver1 -  .Se configura el contenedor
+12/28/2018 09:08:20 PM - DEBUG - webserver1 -  ..Se actualizan los paquetes
+12/28/2018 09:08:22 PM - DEBUG - webserver1 -  ..Se instalan las dependencias
+12/28/2018 09:08:22 PM - DEBUG - webserver1 -  ...Se instala lynx
+12/28/2018 09:08:23 PM - DEBUG - webserver1 -  ...Se instala net-tools
+12/28/2018 09:08:25 PM - DEBUG - webserver1 -  ...Se instala git
+12/28/2018 09:08:32 PM - DEBUG - webserver1 -  ...Se instala npm
+12/28/2018 09:09:07 PM - DEBUG - webserver1 -  ...Se instala mariadb-client
+12/28/2018 09:09:13 PM - DEBUG - webserver1 -  ...Se instala glusterfs-client
+12/28/2018 09:09:27 PM - DEBUG - webserver1 -  ..Dependencias instaladas
+12/28/2018 09:09:27 PM - DEBUG - webserver1 -  ..Se configuran las variables de entorno
+12/28/2018 09:09:27 PM - DEBUG - webserver1 -  ...Se anade: DATABASE_URL=mysql://quiz:xxxx@10.1.2.4/quiz
+12/28/2018 09:09:27 PM - DEBUG - webserver1 -  ...Se anade: QUIZ_OPEN_REGISTER=yes
+12/28/2018 09:09:27 PM - DEBUG - webserver1 -  ..Se ejecuta la pila de run definidos
+12/28/2018 09:09:27 PM - DEBUG - webserver1 -  ...Se ejecuta: git clone https://github.com/CORE-UPM/quiz_2019.git /root/quiz_2019 1>/dev/null
+12/28/2018 09:09:29 PM - DEBUG - webserver1 -  ...Se ejecuta: mkdir /root/quiz_2019/public/uploads
+12/28/2018 09:09:29 PM - DEBUG - webserver1 -  ...Se ejecuta: cd /root/quiz_2019; npm install 1>/dev/null
+12/28/2018 09:09:54 PM - DEBUG - webserver1 -  ...Se ejecuta: cd /root/quiz_2019; npm install -g forever 1>/dev/null
+12/28/2018 09:10:06 PM - DEBUG - webserver1 -  ...Se ejecuta: cd /root/quiz_2019; npm install --save mysql2 1>/dev/null
+12/28/2018 09:10:09 PM - DEBUG - webserver1 -  ..Se genera el script a correr on-boot
+12/28/2018 09:10:09 PM - DEBUG - webserver1 -  ...Se anade: export DATABASE_URL=mysql://quiz:xxxx@10.1.2.4/quiz
+12/28/2018 09:10:09 PM - DEBUG - webserver1 -  ...Se anade: export QUIZ_OPEN_REGISTER=yes
+12/28/2018 09:10:09 PM - DEBUG - webserver1 -  ...Se anade: forever start /root/quiz_2019/bin/www
+12/28/2018 09:10:09 PM - DEBUG - webserver1 -  ...Se sube el script a webserver1/etc/init.d/
+12/28/2018 09:10:09 PM - DEBUG - webserver1 -  ..Se configura nagios
+12/28/2018 09:10:09 PM - DEBUG - webserver1 -  ...Se configura nagios en cliente
+12/28/2018 09:10:32 PM - DEBUG - webserver1 -  ...Se configura nagios en servidor
+12/28/2018 09:10:32 PM - DEBUG - webserver2 -  ...Se configura nagios en servidor
+12/28/2018 09:10:33 PM - DEBUG - webserver3 -  ...Se configura nagios en servidor
+12/28/2018 09:10:33 PM - DEBUG - webserver1 -  ..Se configuran las redes necesarias en host
+12/28/2018 09:10:33 PM - DEBUG - webserver1 -  ...Red intra-lan1 ya existe, no se hace nada
+12/28/2018 09:10:33 PM - DEBUG - webserver1 -  ...Red intra-lan2 ya existe, no se hace nada
+12/28/2018 09:10:33 PM - DEBUG - webserver1 -  ...Red intra-mgmt ya existe, no se hace nada
+12/28/2018 09:10:33 PM - DEBUG - ****** -  Imagen detectada como ubuntu:18.04. Instalamos ifupdown.
+12/28/2018 09:10:36 PM - DEBUG - webserver1 -  ..Se configuran las interfaces de red
+12/28/2018 09:10:36 PM - DEBUG - webserver1 -  ..Se para el contenedor
+12/28/2018 09:10:37 PM - DEBUG - webserver1 -  ...Se anade la red intra-lan1 a la interfaz eth0
+12/28/2018 09:10:37 PM - DEBUG - webserver1 -  ...Se anade la red intra-lan2 a la interfaz eth1
+12/28/2018 09:10:37 PM - DEBUG - webserver1 -  ...Se anade la red intra-mgmt a la interfaz eth2
+12/28/2018 09:10:37 PM - DEBUG - webserver1 -  ..Se inicia el contenedor
+12/28/2018 09:10:38 PM - DEBUG - webserver1 -  ..Se crea el plan de red
+12/28/2018 09:10:38 PM - DEBUG - webserver1 -  ...Se configura eth0
+12/28/2018 09:10:38 PM - DEBUG - webserver1 -  ...Se configura eth1
+12/28/2018 09:10:38 PM - DEBUG - webserver1 -  ...Se configura eth2
+12/28/2018 09:10:38 PM - DEBUG - webserver1 -  ..Se aplica el plan de red
+12/28/2018 09:10:38 PM - DEBUG - webserver1 -  ...Se habilita redireccionamiento IP
+12/28/2018 09:10:38 PM - DEBUG - webserver2 -  .Se crea el contenedor
+12/28/2018 09:10:45 PM - DEBUG - webserver2 -  .Se configura el contenedor
+12/28/2018 09:10:45 PM - DEBUG - webserver2 -  ..Se actualizan los paquetes
+12/28/2018 09:10:47 PM - DEBUG - webserver2 -  ..Se instalan las dependencias
+12/28/2018 09:10:47 PM - DEBUG - webserver2 -  ...Se instala lynx
+12/28/2018 09:10:49 PM - DEBUG - webserver2 -  ...Se instala net-tools
+12/28/2018 09:10:51 PM - DEBUG - webserver2 -  ...Se instala git
+12/28/2018 09:10:58 PM - DEBUG - webserver2 -  ...Se instala npm
+12/28/2018 09:11:33 PM - DEBUG - webserver2 -  ...Se instala mariadb-client
+12/28/2018 09:11:38 PM - DEBUG - webserver2 -  ...Se instala glusterfs-client
+12/28/2018 09:11:53 PM - DEBUG - webserver2 -  ..Dependencias instaladas
+12/28/2018 09:11:53 PM - DEBUG - webserver2 -  ..Se configuran las variables de entorno
+12/28/2018 09:11:53 PM - DEBUG - webserver2 -  ...Se anade: DATABASE_URL=mysql://quiz:xxxx@10.1.2.4/quiz
+12/28/2018 09:11:53 PM - DEBUG - webserver2 -  ...Se anade: QUIZ_OPEN_REGISTER=yes
+12/28/2018 09:11:53 PM - DEBUG - webserver2 -  ..Se ejecuta la pila de run definidos
+12/28/2018 09:11:53 PM - DEBUG - webserver2 -  ...Se ejecuta: git clone https://github.com/CORE-UPM/quiz_2019.git /root/quiz_2019 1>/dev/null
+12/28/2018 09:11:54 PM - DEBUG - webserver2 -  ...Se ejecuta: mkdir /root/quiz_2019/public/uploads
+12/28/2018 09:11:54 PM - DEBUG - webserver2 -  ...Se ejecuta: cd /root/quiz_2019; npm install 1>/dev/null
+12/28/2018 09:12:19 PM - DEBUG - webserver2 -  ...Se ejecuta: cd /root/quiz_2019; npm install -g forever 1>/dev/null
+12/28/2018 09:12:29 PM - DEBUG - webserver2 -  ...Se ejecuta: cd /root/quiz_2019; npm install --save mysql2 1>/dev/null
+12/28/2018 09:12:32 PM - DEBUG - webserver2 -  ..Se genera el script a correr on-boot
+12/28/2018 09:12:32 PM - DEBUG - webserver2 -  ...Se anade: export DATABASE_URL=mysql://quiz:xxxx@10.1.2.4/quiz
+12/28/2018 09:12:32 PM - DEBUG - webserver2 -  ...Se anade: export QUIZ_OPEN_REGISTER=yes
+12/28/2018 09:12:32 PM - DEBUG - webserver2 -  ...Se anade: forever start /root/quiz_2019/bin/www
+12/28/2018 09:12:32 PM - DEBUG - webserver2 -  ...Se sube el script a webserver2/etc/init.d/
+12/28/2018 09:12:32 PM - DEBUG - webserver2 -  ..Se configuran las redes necesarias en host
+12/28/2018 09:12:32 PM - DEBUG - webserver2 -  ...Red intra-lan1 ya existe, no se hace nada
+12/28/2018 09:12:32 PM - DEBUG - webserver2 -  ...Red intra-lan2 ya existe, no se hace nada
+12/28/2018 09:12:32 PM - DEBUG - webserver2 -  ...Red intra-mgmt ya existe, no se hace nada
+12/28/2018 09:12:32 PM - DEBUG - ****** -  Imagen detectada como ubuntu:18.04. Instalamos ifupdown.
+12/28/2018 09:12:35 PM - DEBUG - webserver2 -  ..Se configuran las interfaces de red
+12/28/2018 09:12:35 PM - DEBUG - webserver2 -  ..Se para el contenedor
+12/28/2018 09:12:36 PM - DEBUG - webserver2 -  ...Se anade la red intra-lan1 a la interfaz eth0
+12/28/2018 09:12:36 PM - DEBUG - webserver2 -  ...Se anade la red intra-lan2 a la interfaz eth1
+12/28/2018 09:12:37 PM - DEBUG - webserver2 -  ...Se anade la red intra-mgmt a la interfaz eth2
+12/28/2018 09:12:37 PM - DEBUG - webserver2 -  ..Se inicia el contenedor
+12/28/2018 09:12:37 PM - DEBUG - webserver2 -  ..Se crea el plan de red
+12/28/2018 09:12:37 PM - DEBUG - webserver2 -  ...Se configura eth0
+12/28/2018 09:12:37 PM - DEBUG - webserver2 -  ...Se configura eth1
+12/28/2018 09:12:37 PM - DEBUG - webserver2 -  ...Se configura eth2
+12/28/2018 09:12:37 PM - DEBUG - webserver2 -  ..Se aplica el plan de red
+12/28/2018 09:12:37 PM - DEBUG - webserver2 -  ...Se habilita redireccionamiento IP
+12/28/2018 09:12:37 PM - DEBUG - webserver3 -  .Se crea el contenedor
+12/28/2018 09:12:44 PM - DEBUG - webserver3 -  .Se configura el contenedor
+12/28/2018 09:12:44 PM - DEBUG - webserver3 -  ..Se actualizan los paquetes
+12/28/2018 09:12:46 PM - DEBUG - webserver3 -  ..Se instalan las dependencias
+12/28/2018 09:12:46 PM - DEBUG - webserver3 -  ...Se instala lynx
+12/28/2018 09:12:48 PM - DEBUG - webserver3 -  ...Se instala net-tools
+12/28/2018 09:12:49 PM - DEBUG - webserver3 -  ...Se instala git
+12/28/2018 09:12:57 PM - DEBUG - webserver3 -  ...Se instala npm
+12/28/2018 09:13:31 PM - DEBUG - webserver3 -  ...Se instala mariadb-client
+12/28/2018 09:13:36 PM - DEBUG - webserver3 -  ...Se instala glusterfs-client
+12/28/2018 09:13:51 PM - DEBUG - webserver3 -  ..Dependencias instaladas
+12/28/2018 09:13:51 PM - DEBUG - webserver3 -  ..Se configuran las variables de entorno
+12/28/2018 09:13:51 PM - DEBUG - webserver3 -  ...Se anade: DATABASE_URL=mysql://quiz:xxxx@10.1.2.4/quiz
+12/28/2018 09:13:51 PM - DEBUG - webserver3 -  ...Se anade: QUIZ_OPEN_REGISTER=yes
+12/28/2018 09:13:51 PM - DEBUG - webserver3 -  ..Se ejecuta la pila de run definidos
+12/28/2018 09:13:51 PM - DEBUG - webserver3 -  ...Se ejecuta: git clone https://github.com/CORE-UPM/quiz_2019.git /root/quiz_2019 1>/dev/null
+12/28/2018 09:13:52 PM - DEBUG - webserver3 -  ...Se ejecuta: mkdir /root/quiz_2019/public/uploads
+12/28/2018 09:13:52 PM - DEBUG - webserver3 -  ...Se ejecuta: cd /root/quiz_2019; npm install 1>/dev/null
+12/28/2018 09:14:14 PM - DEBUG - webserver3 -  ...Se ejecuta: cd /root/quiz_2019; npm install -g forever 1>/dev/null
+12/28/2018 09:14:23 PM - DEBUG - webserver3 -  ...Se ejecuta: cd /root/quiz_2019; npm install --save mysql2 1>/dev/null
+12/28/2018 09:14:26 PM - DEBUG - webserver3 -  ..Se genera el script a correr on-boot
+12/28/2018 09:14:26 PM - DEBUG - webserver3 -  ...Se anade: export DATABASE_URL=mysql://quiz:xxxx@10.1.2.4/quiz
+12/28/2018 09:14:26 PM - DEBUG - webserver3 -  ...Se anade: export QUIZ_OPEN_REGISTER=yes
+12/28/2018 09:14:26 PM - DEBUG - webserver3 -  ...Se anade: forever start /root/quiz_2019/bin/www
+12/28/2018 09:14:26 PM - DEBUG - webserver3 -  ...Se sube el script a webserver3/etc/init.d/
+12/28/2018 09:14:26 PM - DEBUG - webserver3 -  ..Se configuran las redes necesarias en host
+12/28/2018 09:14:26 PM - DEBUG - webserver3 -  ...Red intra-lan1 ya existe, no se hace nada
+12/28/2018 09:14:26 PM - DEBUG - webserver3 -  ...Red intra-lan2 ya existe, no se hace nada
+12/28/2018 09:14:26 PM - DEBUG - webserver3 -  ...Red intra-mgmt ya existe, no se hace nada
+12/28/2018 09:14:26 PM - DEBUG - ****** -  Imagen detectada como ubuntu:18.04. Instalamos ifupdown.
+12/28/2018 09:14:29 PM - DEBUG - webserver3 -  ..Se configuran las interfaces de red
+12/28/2018 09:14:29 PM - DEBUG - webserver3 -  ..Se para el contenedor
+12/28/2018 09:14:30 PM - DEBUG - webserver3 -  ...Se anade la red intra-lan1 a la interfaz eth0
+12/28/2018 09:14:30 PM - DEBUG - webserver3 -  ...Se anade la red intra-lan2 a la interfaz eth1
+12/28/2018 09:14:30 PM - DEBUG - webserver3 -  ...Se anade la red intra-mgmt a la interfaz eth2
+12/28/2018 09:14:30 PM - DEBUG - webserver3 -  ..Se inicia el contenedor
+12/28/2018 09:14:31 PM - DEBUG - webserver3 -  ..Se crea el plan de red
+12/28/2018 09:14:31 PM - DEBUG - webserver3 -  ...Se configura eth0
+12/28/2018 09:14:31 PM - DEBUG - webserver3 -  ...Se configura eth1
+12/28/2018 09:14:31 PM - DEBUG - webserver3 -  ...Se configura eth2
+12/28/2018 09:14:31 PM - DEBUG - webserver3 -  ..Se aplica el plan de red
+12/28/2018 09:14:31 PM - DEBUG - webserver3 -  ...Se habilita redireccionamiento IP
+12/28/2018 09:14:31 PM - DEBUG - ****** - ..Se ejecuta la pila de scripts literales definidos
+12/28/2018 09:14:31 PM - DEBUG - ****** - ...Se ejecuta: lxc exec webserver1 -- bash -c "export DATABASE_URL=mysql://quiz:xxxx@10.1.2.4/quiz; export QUIZ_OPEN_REGISTER=yes; cd /root/quiz_2019; npm run-script migrate_cdps"
+12/28/2018 09:14:34 PM - DEBUG - ****** - ...Se ejecuta: lxc exec webserver1 -- bash -c "export DATABASE_URL=mysql://quiz:xxxx@10.1.2.4/quiz; export QUIZ_OPEN_REGISTER=yes; cd /root/quiz_2019; npm run-script seed_cdps"
+12/28/2018 09:14:35 PM - DEBUG - ****** - ...Se ejecuta: lxc exec webserver1 -- bash -c "mount -t glusterfs 10.1.2.5:/nas /root/quiz_2019/public/uploads"
+12/28/2018 09:14:35 PM - DEBUG - ****** - ...Se ejecuta: lxc exec webserver2 -- bash -c "mount -t glusterfs 10.1.2.6:/nas /root/quiz_2019/public/uploads"
+12/28/2018 09:14:35 PM - DEBUG - ****** - ...Se ejecuta: lxc exec webserver3 -- bash -c "mount -t glusterfs 10.1.2.7:/nas /root/quiz_2019/public/uploads"
+12/28/2018 10:19:26 PM - DEBUG - nagios1 - .Se crea el contenedor
+12/28/2018 10:19:35 PM - DEBUG - nagios1 - .Se configura el contenedor
+12/28/2018 10:19:35 PM - DEBUG - nagios1 - ..Se actualizan los paquetes
+12/28/2018 10:19:43 PM - DEBUG - nagios1 - ..Se instalan las dependencias
+12/28/2018 10:19:43 PM - DEBUG - nagios1 - ...Se instala lynx
+12/28/2018 10:19:45 PM - DEBUG - nagios1 - ...Se instala net-tools
+12/28/2018 10:19:45 PM - DEBUG - nagios1 - ...Se instala traceroute
+12/28/2018 10:19:46 PM - DEBUG - nagios1 - ...Se instala nmap
+12/28/2018 10:19:58 PM - DEBUG - nagios1 - ...Se instala autoconf gcc libc6 make wget unzip apache2 php libapache2-mod-php7.0 libgd2-xpm-dev
+12/28/2018 10:20:56 PM - DEBUG - nagios1 - ...Se instala nagios-plugins
+12/28/2018 10:21:19 PM - DEBUG - nagios1 - ..Dependencias instaladas
+12/28/2018 10:21:19 PM - DEBUG - nagios1 - ..Se ejecuta la pila de run definidos
+12/28/2018 10:21:19 PM - DEBUG - nagios1 - ...Se ejecuta: cd /tmp; wget -O nagioscore.tar.gz https://github.com/NagiosEnterprises/nagioscore/archive/nagios-4.4.1.tar.gz 1>/dev/null
+12/28/2018 10:21:21 PM - DEBUG - nagios1 - ...Se ejecuta: cd /tmp; tar xzf nagioscore.tar.gz
+12/28/2018 10:21:22 PM - DEBUG - nagios1 - ...Se ejecuta: cd /tmp/nagioscore-nagios-4.4.1/; sudo ./configure --with-httpd-conf=/etc/apache2/sites-enabled 1>/dev/null
+12/28/2018 10:21:26 PM - DEBUG - nagios1 - ...Se ejecuta: cd /tmp/nagioscore-nagios-4.4.1/; sudo make all 1>/dev/null
+12/28/2018 10:21:56 PM - DEBUG - nagios1 - ...Se ejecuta: cd /tmp/nagioscore-nagios-4.4.1/; sudo make install-groups-users 1>/dev/null
+12/28/2018 10:21:56 PM - DEBUG - nagios1 - ...Se ejecuta: cd /tmp/nagioscore-nagios-4.4.1/; sudo usermod -a -G nagios www-data
+12/28/2018 10:21:56 PM - DEBUG - nagios1 - ...Se ejecuta: cd /tmp/nagioscore-nagios-4.4.1/; sudo make install 1>/dev/null
+12/28/2018 10:21:57 PM - DEBUG - nagios1 - ...Se ejecuta: cd /tmp/nagioscore-nagios-4.4.1/; sudo make install-daemoninit 1>/dev/null
+12/28/2018 10:21:57 PM - DEBUG - nagios1 - ...Se ejecuta: cd /tmp/nagioscore-nagios-4.4.1/; sudo make install-commandmode 1>/dev/null
+12/28/2018 10:21:57 PM - DEBUG - nagios1 - ...Se ejecuta: cd /tmp/nagioscore-nagios-4.4.1/; sudo make install-config 1>/dev/null
+12/28/2018 10:21:57 PM - DEBUG - nagios1 - ...Se ejecuta: cd /tmp/nagioscore-nagios-4.4.1/; sudo make install-webconf 1>/dev/null
+12/28/2018 10:21:57 PM - DEBUG - nagios1 - ...Se ejecuta: sudo a2enmod rewrite 1>/dev/null
+12/28/2018 10:21:58 PM - DEBUG - nagios1 - ...Se ejecuta: sudo a2enmod cgi 1>/dev/null
+12/28/2018 10:21:58 PM - DEBUG - nagios1 - ...Se ejecuta: echo "admin" | htpasswd -c -i /usr/local/nagios/etc/htpasswd.users nagiosadmin
+12/28/2018 10:21:58 PM - DEBUG - nagios1 - ...Se ejecuta: cp /usr/lib/nagios/plugins/check_* /usr/local/nagios/libexec
+12/28/2018 10:21:58 PM - DEBUG - nagios1 - ...Se ejecuta: mkdir /usr/local/nagios/etc/servers
+12/28/2018 10:21:58 PM - DEBUG - nagios1 - ...Se ejecuta: touch /usr/local/nagios/etc/servers/clients.cfg
+12/28/2018 10:21:58 PM - DEBUG - nagios1 - ...Se ejecuta: echo "cfg_dir=/usr/local/nagios/etc/servers" >> /usr/local/nagios/etc/nagios.cfg
+12/28/2018 10:21:58 PM - DEBUG - nagios1 - ...Se ejecuta: sudo systemctl restart apache2.service
+12/28/2018 10:22:00 PM - DEBUG - nagios1 - ...Se ejecuta: sudo systemctl start nagios.service
+12/28/2018 10:22:00 PM - DEBUG - nagios1 - ..Se configuran las redes necesarias en host
+12/28/2018 10:22:00 PM - DEBUG - nagios1 - ...Red intra-mgmt no existe, se crea el bridge
+12/28/2018 10:22:00 PM - DEBUG - nagios1 - ..Se configuran las interfaces de red
+12/28/2018 10:22:00 PM - DEBUG - nagios1 - ..Se para el contenedor
+12/28/2018 10:22:04 PM - DEBUG - nagios1 - ...Se anade la red intra-mgmt a la interfaz eth0
+12/28/2018 10:22:04 PM - DEBUG - nagios1 - ..Se inicia el contenedor
+12/28/2018 10:22:04 PM - DEBUG - nagios1 - ..Se crea el plan de red
+12/28/2018 10:22:04 PM - DEBUG - nagios1 - ...Se configura eth0
+12/28/2018 10:22:04 PM - DEBUG - nagios1 - ..Se aplica el plan de red
+12/28/2018 10:22:05 PM - DEBUG - firewall1 - .Se crea el contenedor
+12/28/2018 10:22:11 PM - DEBUG - firewall1 - .Se configura el contenedor
+12/28/2018 10:22:11 PM - DEBUG - firewall1 - ..Se actualizan los paquetes
+12/28/2018 10:22:13 PM - DEBUG - firewall1 - ..Se instalan las dependencias
+12/28/2018 10:22:13 PM - DEBUG - firewall1 - ...Se instala lynx
+12/28/2018 10:22:15 PM - DEBUG - firewall1 - ...Se instala net-tools
+12/28/2018 10:22:16 PM - DEBUG - firewall1 - ...Se instala tcpdump
+12/28/2018 10:22:18 PM - DEBUG - firewall1 - ...Se instala traceroute
+12/28/2018 10:22:19 PM - DEBUG - firewall1 - ...Se instala nmap
+12/28/2018 10:22:22 PM - DEBUG - firewall1 - ...Se instala fwbuilder
+12/28/2018 10:23:11 PM - DEBUG - firewall1 - ...Se instala iptables
+12/28/2018 10:23:13 PM - DEBUG - firewall1 - ..Dependencias instaladas
+12/28/2018 10:23:13 PM - DEBUG - firewall1 - ..Se genera el script a correr on-boot
+12/28/2018 10:23:13 PM - DEBUG - firewall1 - ...Se anade: /fw.fw
+12/28/2018 10:23:13 PM - DEBUG - firewall1 - ...Se sube el script a firewall1/etc/init.d/
+12/28/2018 10:23:13 PM - DEBUG - firewall1 - ..Se configura nagios
+12/28/2018 10:23:13 PM - DEBUG - firewall1 - ...Se configura nagios en cliente
+12/28/2018 10:23:40 PM - DEBUG - firewall1 - ..Se configuran las redes necesarias en host
+12/28/2018 10:23:40 PM - DEBUG - firewall1 - ...Red intra-lan0 no existe, se crea el bridge
+12/28/2018 10:23:40 PM - DEBUG - firewall1 - ...Red intra-mgmt ya existe, no se hace nada
+12/28/2018 10:23:40 PM - DEBUG - ****** -  Imagen detectada como ubuntu:18.04. Instalamos ifupdown.
+12/28/2018 10:23:43 PM - DEBUG - firewall1 - ..Se configuran las interfaces de red
+12/28/2018 10:23:43 PM - DEBUG - firewall1 - ..Se para el contenedor
+12/28/2018 10:23:44 PM - DEBUG - firewall1 - ...Se anade la red intra-lan0 a la interfaz eth1
+12/28/2018 10:23:44 PM - DEBUG - firewall1 - ...Se anade la red intra-mgmt a la interfaz eth2
+12/28/2018 10:23:44 PM - DEBUG - firewall1 - ..Se inicia el contenedor
+12/28/2018 10:23:45 PM - DEBUG - firewall1 - ..Se crea el plan de red
+12/28/2018 10:23:45 PM - DEBUG - firewall1 - ...Se configura eth0
+12/28/2018 10:23:45 PM - DEBUG - firewall1 - ...Se configura eth1
+12/28/2018 10:23:45 PM - DEBUG - firewall1 - ...Se configura eth2
+12/28/2018 10:23:45 PM - DEBUG - firewall1 - ..Se aplica el plan de red
+12/28/2018 10:23:45 PM - WARNING - firewall1 - ...Se habilita redireccionamiento IP
+12/28/2018 10:23:45 PM - DEBUG - ****** - ..Se ejecuta la pila de scripts literales definidos
+12/28/2018 10:23:45 PM - DEBUG - ****** - ...Se ejecuta: lxc file push ../templates/firewall/firewall.fwb firewall1/ 1>/dev/null
+12/28/2018 10:23:45 PM - DEBUG - ****** - ...Se ejecuta: lxc exec firewall1 -- bash -c "fwb_ipt -v -f /firewall.fwb -d / -o fw.fw -i id2327X32499" 1>/dev/null
+12/28/2018 10:23:45 PM - DEBUG - ****** - ...Se ejecuta: lxc exec firewall1 -- bash -c "/fw.fw" 1>/dev/null
+12/28/2018 10:23:46 PM - DEBUG - loadbalancer1 - .Se crea el contenedor
+12/28/2018 10:23:52 PM - DEBUG - loadbalancer1 - .Se configura el contenedor
+12/28/2018 10:23:52 PM - DEBUG - loadbalancer1 - ..Se actualizan los paquetes
+12/28/2018 10:23:54 PM - DEBUG - loadbalancer1 - ..Se instalan las dependencias
+12/28/2018 10:23:54 PM - DEBUG - loadbalancer1 - ...Se instala lynx
+12/28/2018 10:23:56 PM - DEBUG - loadbalancer1 - ...Se instala net-tools
+12/28/2018 10:23:57 PM - DEBUG - loadbalancer1 - ...Se instala tcpdump
+12/28/2018 10:23:59 PM - DEBUG - loadbalancer1 - ...Se instala traceroute
+12/28/2018 10:24:00 PM - DEBUG - loadbalancer1 - ...Se instala nmap
+12/28/2018 10:24:02 PM - DEBUG - loadbalancer1 - ...Se instala haproxy
+12/28/2018 10:24:05 PM - DEBUG - loadbalancer1 - ..Dependencias instaladas
+12/28/2018 10:24:05 PM - DEBUG - loadbalancer1 - ..Se configura nagios
+12/28/2018 10:24:05 PM - DEBUG - loadbalancer1 - ...Se configura nagios en cliente
+12/28/2018 10:24:38 PM - DEBUG - loadbalancer1 - ...Se configura nagios en servidor
+12/28/2018 10:24:38 PM - DEBUG - loadbalancer1 - ..Se configuran las redes necesarias en host
+12/28/2018 10:24:38 PM - DEBUG - loadbalancer1 - ...Red intra-lan0 ya existe, no se hace nada
+12/28/2018 10:24:38 PM - DEBUG - loadbalancer1 - ...Red intra-lan1 no existe, se crea el bridge
+12/28/2018 10:24:38 PM - DEBUG - loadbalancer1 - ...Red intra-mgmt ya existe, no se hace nada
+12/28/2018 10:24:38 PM - DEBUG - ****** -  Imagen detectada como ubuntu:18.04. Instalamos ifupdown.
+12/28/2018 10:24:41 PM - DEBUG - loadbalancer1 - ..Se configuran las interfaces de red
+12/28/2018 10:24:41 PM - DEBUG - loadbalancer1 - ..Se para el contenedor
+12/28/2018 10:24:42 PM - DEBUG - loadbalancer1 - ...Se anade la red intra-lan0 a la interfaz eth0
+12/28/2018 10:24:42 PM - DEBUG - loadbalancer1 - ...Se anade la red intra-lan1 a la interfaz eth1
+12/28/2018 10:24:42 PM - DEBUG - loadbalancer1 - ...Se anade la red intra-mgmt a la interfaz eth2
+12/28/2018 10:24:42 PM - DEBUG - loadbalancer1 - ..Se inicia el contenedor
+12/28/2018 10:24:43 PM - DEBUG - loadbalancer1 - ..Se crea el plan de red
+12/28/2018 10:24:43 PM - DEBUG - loadbalancer1 - ...Se configura eth0
+12/28/2018 10:24:43 PM - DEBUG - loadbalancer1 - ...Se configura eth1
+12/28/2018 10:24:43 PM - DEBUG - loadbalancer1 - ...Se configura eth2
+12/28/2018 10:24:43 PM - DEBUG - loadbalancer1 - ..Se aplica el plan de red
+12/28/2018 10:24:43 PM - WARNING - loadbalancer1 - ...Se habilita redireccionamiento IP
+12/28/2018 10:24:43 PM - DEBUG - ****** - ..Se ejecuta la pila de scripts literales definidos
+12/28/2018 10:24:43 PM - DEBUG - ****** - ...Se ejecuta: lxc file push ../scripts/haproxy.cfg loadbalancer1/etc/haproxy/haproxy.cfg
+12/28/2018 10:24:43 PM - DEBUG - ****** - ...Se ejecuta: lxc exec loadbalancer1 -- bash -c "service haproxy restart"
+12/28/2018 10:24:43 PM - DEBUG - database1 - .Se crea el contenedor
+12/28/2018 10:24:49 PM - DEBUG - database1 - .Se configura el contenedor
+12/28/2018 10:24:49 PM - DEBUG - database1 - ..Se actualizan los paquetes
+12/28/2018 10:24:51 PM - DEBUG - database1 - ..Se instalan las dependencias
+12/28/2018 10:24:51 PM - DEBUG - database1 - ...Se instala mariadb-server
+12/28/2018 10:25:20 PM - DEBUG - database1 - ..Dependencias instaladas
+12/28/2018 10:25:20 PM - DEBUG - database1 - ..Se ejecuta la pila de run definidos
+12/28/2018 10:25:20 PM - DEBUG - database1 - ...Se ejecuta: sudo sed -i /etc/mysql/mariadb.conf.d/50-server.cnf -e 's/bind-address.*/bind-address=0.0.0.0/' -e 's/utf8mb4/utf8/'
+12/28/2018 10:25:20 PM - DEBUG - database1 - ...Se ejecuta: sudo systemctl restart mysql
+12/28/2018 10:25:23 PM - DEBUG - database1 - ...Se ejecuta: sudo mysqladmin -u root password xxxx
+12/28/2018 10:25:23 PM - DEBUG - database1 - ...Se ejecuta: sudo mysql -u root --password=xxxx -e \"CREATE USER 'quiz' IDENTIFIED BY 'xxxx';\"
+12/28/2018 10:25:23 PM - DEBUG - database1 - ...Se ejecuta: sudo mysql -u root --password=xxxx -e \"CREATE DATABASE quiz;\"
+12/28/2018 10:25:23 PM - DEBUG - database1 - ...Se ejecuta: sudo mysql -u root --password=xxxx -e \"GRANT ALL PRIVILEGES ON quiz.* to 'quiz'@'localhost' IDENTIFIED BY 'xxxx';\"
+12/28/2018 10:25:23 PM - DEBUG - database1 - ...Se ejecuta: sudo mysql -u root --password=xxxx -e \"GRANT ALL PRIVILEGES ON quiz.* to 'quiz'@'%' IDENTIFIED BY 'xxxx';\"
+12/28/2018 10:25:23 PM - DEBUG - database1 - ...Se ejecuta: sudo mysql -u root --password=xxxx -e \"FLUSH PRIVILEGES;\"
+12/28/2018 10:25:23 PM - DEBUG - database1 - ...Se ejecuta: sudo systemctl restart mysql
+12/28/2018 10:25:26 PM - DEBUG - database1 - ..Se configura nagios
+12/28/2018 10:25:26 PM - DEBUG - database1 - ...Se configura nagios en cliente
+12/28/2018 10:25:55 PM - DEBUG - database1 - ...Se configura nagios en servidor
+12/28/2018 10:25:55 PM - DEBUG - database1 - ..Se configuran las redes necesarias en host
+12/28/2018 10:25:55 PM - DEBUG - database1 - ...Red intra-lan2 no existe, se crea el bridge
+12/28/2018 10:25:55 PM - DEBUG - database1 - ...Red intra-mgmt ya existe, no se hace nada
+12/28/2018 10:25:55 PM - DEBUG - ****** -  Imagen detectada como ubuntu:18.04. Instalamos ifupdown.
+12/28/2018 10:25:58 PM - DEBUG - database1 - ..Se configuran las interfaces de red
+12/28/2018 10:25:58 PM - DEBUG - database1 - ..Se para el contenedor
+12/28/2018 10:26:02 PM - DEBUG - database1 - ...Se anade la red intra-lan2 a la interfaz eth0
+12/28/2018 10:26:02 PM - DEBUG - database1 - ...Se anade la red intra-mgmt a la interfaz eth1
+12/28/2018 10:26:02 PM - DEBUG - database1 - ..Se inicia el contenedor
+12/28/2018 10:26:03 PM - DEBUG - database1 - ..Se crea el plan de red
+12/28/2018 10:26:03 PM - DEBUG - database1 - ...Se configura eth0
+12/28/2018 10:26:03 PM - DEBUG - database1 - ...Se configura eth1
+12/28/2018 10:26:03 PM - DEBUG - database1 - ..Se aplica el plan de red
+12/28/2018 10:26:03 PM - DEBUG - storage1 - .Se crea el contenedor
+12/28/2018 10:26:10 PM - DEBUG - storage1 - .Se configura el contenedor
+12/28/2018 10:26:10 PM - DEBUG - storage1 - ..Se actualizan los paquetes
+12/28/2018 10:26:11 PM - DEBUG - storage1 - ..Se le dan privilegios al contenedor
+12/28/2018 10:26:11 PM - DEBUG - storage1 - ..Se instalan las dependencias
+12/28/2018 10:26:11 PM - DEBUG - storage1 - ...Se instala net-tools
+12/28/2018 10:26:11 PM - DEBUG - storage1 - ...Se instala glusterfs-server
+12/28/2018 10:26:36 PM - DEBUG - storage1 - ..Dependencias instaladas
+12/28/2018 10:26:36 PM - DEBUG - storage1 - ..Se configura nagios
+12/28/2018 10:26:36 PM - DEBUG - storage1 - ...Se configura nagios en cliente
+12/28/2018 10:27:02 PM - DEBUG - storage1 - ...Se configura nagios en servidor
+12/28/2018 10:27:02 PM - DEBUG - storage2 - ...Se configura nagios en servidor
+12/28/2018 10:27:03 PM - DEBUG - storage3 - ...Se configura nagios en servidor
+12/28/2018 10:27:03 PM - DEBUG - storage1 - ..Se configuran las redes necesarias en host
+12/28/2018 10:27:03 PM - DEBUG - storage1 - ...Red intra-lan2 ya existe, no se hace nada
+12/28/2018 10:27:03 PM - DEBUG - storage1 - ...Red intra-mgmt ya existe, no se hace nada
+12/28/2018 10:27:03 PM - DEBUG - storage1 - ..Se configuran las interfaces de red
+12/28/2018 10:27:03 PM - DEBUG - storage1 - ..Se para el contenedor
+12/28/2018 10:27:05 PM - DEBUG - storage1 - ...Se anade la red intra-lan2 a la interfaz eth0
+12/28/2018 10:27:05 PM - DEBUG - storage1 - ...Se anade la red intra-mgmt a la interfaz eth1
+12/28/2018 10:27:05 PM - DEBUG - storage1 - ..Se inicia el contenedor
+12/28/2018 10:27:06 PM - DEBUG - storage1 - ..Se crea el plan de red
+12/28/2018 10:27:06 PM - DEBUG - storage1 - ...Se configura eth0
+12/28/2018 10:27:06 PM - DEBUG - storage1 - ...Se configura eth1
+12/28/2018 10:27:06 PM - DEBUG - storage1 - ..Se aplica el plan de red
+12/28/2018 10:27:06 PM - DEBUG - storage2 - .Se crea el contenedor
+12/28/2018 10:27:13 PM - DEBUG - storage2 - .Se configura el contenedor
+12/28/2018 10:27:13 PM - DEBUG - storage2 - ..Se actualizan los paquetes
+12/28/2018 10:27:14 PM - DEBUG - storage2 - ..Se le dan privilegios al contenedor
+12/28/2018 10:27:14 PM - DEBUG - storage2 - ..Se instalan las dependencias
+12/28/2018 10:27:14 PM - DEBUG - storage2 - ...Se instala net-tools
+12/28/2018 10:27:15 PM - DEBUG - storage2 - ...Se instala glusterfs-server
+12/28/2018 10:27:39 PM - DEBUG - storage2 - ..Dependencias instaladas
+12/28/2018 10:27:39 PM - DEBUG - storage2 - ..Se configuran las redes necesarias en host
+12/28/2018 10:27:39 PM - DEBUG - storage2 - ...Red intra-lan2 ya existe, no se hace nada
+12/28/2018 10:27:39 PM - DEBUG - storage2 - ...Red intra-mgmt ya existe, no se hace nada
+12/28/2018 10:27:39 PM - DEBUG - storage2 - ..Se configuran las interfaces de red
+12/28/2018 10:27:39 PM - DEBUG - storage2 - ..Se para el contenedor
+12/28/2018 10:27:42 PM - DEBUG - storage2 - ...Se anade la red intra-lan2 a la interfaz eth0
+12/28/2018 10:27:42 PM - DEBUG - storage2 - ...Se anade la red intra-mgmt a la interfaz eth1
+12/28/2018 10:27:42 PM - DEBUG - storage2 - ..Se inicia el contenedor
+12/28/2018 10:27:43 PM - DEBUG - storage2 - ..Se crea el plan de red
+12/28/2018 10:27:43 PM - DEBUG - storage2 - ...Se configura eth0
+12/28/2018 10:27:43 PM - DEBUG - storage2 - ...Se configura eth1
+12/28/2018 10:27:43 PM - DEBUG - storage2 - ..Se aplica el plan de red
+12/28/2018 10:27:43 PM - DEBUG - storage3 - .Se crea el contenedor
+12/28/2018 10:27:50 PM - DEBUG - storage3 - .Se configura el contenedor
+12/28/2018 10:27:50 PM - DEBUG - storage3 - ..Se actualizan los paquetes
+12/28/2018 10:27:52 PM - DEBUG - storage3 - ..Se le dan privilegios al contenedor
+12/28/2018 10:27:52 PM - DEBUG - storage3 - ..Se instalan las dependencias
+12/28/2018 10:27:52 PM - DEBUG - storage3 - ...Se instala net-tools
+12/28/2018 10:27:52 PM - DEBUG - storage3 - ...Se instala glusterfs-server
+12/28/2018 10:28:17 PM - DEBUG - storage3 - ..Dependencias instaladas
+12/28/2018 10:28:17 PM - DEBUG - storage3 - ..Se configuran las redes necesarias en host
+12/28/2018 10:28:17 PM - DEBUG - storage3 - ...Red intra-lan2 ya existe, no se hace nada
+12/28/2018 10:28:17 PM - DEBUG - storage3 - ...Red intra-mgmt ya existe, no se hace nada
+12/28/2018 10:28:17 PM - DEBUG - storage3 - ..Se configuran las interfaces de red
+12/28/2018 10:28:17 PM - DEBUG - storage3 - ..Se para el contenedor
+12/28/2018 10:28:19 PM - DEBUG - storage3 - ...Se anade la red intra-lan2 a la interfaz eth0
+12/28/2018 10:28:19 PM - DEBUG - storage3 - ...Se anade la red intra-mgmt a la interfaz eth1
+12/28/2018 10:28:19 PM - DEBUG - storage3 - ..Se inicia el contenedor
+12/28/2018 10:28:20 PM - DEBUG - storage3 - ..Se crea el plan de red
+12/28/2018 10:28:20 PM - DEBUG - storage3 - ...Se configura eth0
+12/28/2018 10:28:20 PM - DEBUG - storage3 - ...Se configura eth1
+12/28/2018 10:28:20 PM - DEBUG - storage3 - ..Se aplica el plan de red
+12/28/2018 10:28:20 PM - DEBUG - ****** - ..Se ejecuta la pila de scripts literales definidos
+12/28/2018 10:28:20 PM - DEBUG - ****** - ...Se ejecuta: lxc exec storage1 -- bash -c  "gluster peer probe 10.1.2.6"
+12/28/2018 10:28:20 PM - DEBUG - ****** - ...Se ejecuta: lxc exec storage1 -- bash -c  "gluster peer probe 10.1.2.7"
+12/28/2018 10:28:22 PM - DEBUG - ****** - ...Se ejecuta: lxc exec storage1 -- bash -c  "gluster volume create nas replica 3 10.1.2.5:/nas/ 10.1.2.6:/nas/ 10.1.2.7:/nas/ force"
+12/28/2018 10:28:22 PM - DEBUG - ****** - ...Se ejecuta: lxc exec storage1 -- bash -c  "gluster volume start nas"
+12/28/2018 10:28:23 PM - DEBUG - ****** - ...Se ejecuta: lxc config set storage1 security.privileged false
+12/28/2018 10:28:23 PM - DEBUG - ****** - ...Se ejecuta: lxc config set storage2 security.privileged false
+12/28/2018 10:28:23 PM - DEBUG - ****** - ...Se ejecuta: lxc config set storage3 security.privileged false
+12/28/2018 10:28:23 PM - WARNING - ****** -  NOTE that storage containers were created with privileges!!!! It is your responsability to turn each container privileges off!!!!
+12/28/2018 10:28:23 PM - DEBUG - webserver1 - .Se crea el contenedor
+12/28/2018 10:28:30 PM - DEBUG - webserver1 - .Se configura el contenedor
+12/28/2018 10:28:30 PM - DEBUG - webserver1 - ..Se actualizan los paquetes
+12/28/2018 10:28:32 PM - DEBUG - webserver1 - ..Se instalan las dependencias
+12/28/2018 10:28:32 PM - DEBUG - webserver1 - ...Se instala lynx
+12/28/2018 10:28:34 PM - DEBUG - webserver1 - ...Se instala net-tools
+12/28/2018 10:28:35 PM - DEBUG - webserver1 - ...Se instala git
+12/28/2018 10:28:43 PM - DEBUG - webserver1 - ...Se instala npm
+12/28/2018 10:29:18 PM - DEBUG - webserver1 - ...Se instala mariadb-client
+12/28/2018 10:29:22 PM - DEBUG - webserver1 - ...Se instala glusterfs-client
+12/28/2018 10:29:37 PM - DEBUG - webserver1 - ..Dependencias instaladas
+12/28/2018 10:29:37 PM - DEBUG - webserver1 - ..Se configuran las variables de entorno
+12/28/2018 10:29:37 PM - DEBUG - webserver1 - ...Se anade: DATABASE_URL=mysql://quiz:xxxx@10.1.2.4/quiz
+12/28/2018 10:29:37 PM - DEBUG - webserver1 - ...Se anade: QUIZ_OPEN_REGISTER=yes
+12/28/2018 10:29:37 PM - DEBUG - webserver1 - ..Se ejecuta la pila de run definidos
+12/28/2018 10:29:37 PM - DEBUG - webserver1 - ...Se ejecuta: git clone https://github.com/CORE-UPM/quiz_2019.git /root/quiz_2019 1>/dev/null
+12/28/2018 10:29:39 PM - DEBUG - webserver1 - ...Se ejecuta: mkdir /root/quiz_2019/public/uploads
+12/28/2018 10:29:39 PM - DEBUG - webserver1 - ...Se ejecuta: cd /root/quiz_2019; npm install 1>/dev/null
+12/28/2018 10:30:09 PM - DEBUG - webserver1 - ...Se ejecuta: cd /root/quiz_2019; npm install -g forever 1>/dev/null
+12/28/2018 10:30:22 PM - DEBUG - webserver1 - ...Se ejecuta: cd /root/quiz_2019; npm install --save mysql2 1>/dev/null
+12/28/2018 10:30:26 PM - DEBUG - webserver1 - ..Se genera el script a correr on-boot
+12/28/2018 10:30:26 PM - DEBUG - webserver1 - ...Se anade: export DATABASE_URL=mysql://quiz:xxxx@10.1.2.4/quiz
+12/28/2018 10:30:26 PM - DEBUG - webserver1 - ...Se anade: export QUIZ_OPEN_REGISTER=yes
+12/28/2018 10:30:26 PM - DEBUG - webserver1 - ...Se anade: forever start /root/quiz_2019/bin/www
+12/28/2018 10:30:26 PM - DEBUG - webserver1 - ...Se sube el script a webserver1/etc/init.d/
+12/28/2018 10:30:26 PM - DEBUG - webserver1 - ..Se configura nagios
+12/28/2018 10:30:26 PM - DEBUG - webserver1 - ...Se configura nagios en cliente
+12/28/2018 10:30:50 PM - DEBUG - webserver1 - ...Se configura nagios en servidor
+12/28/2018 10:30:50 PM - DEBUG - webserver2 - ...Se configura nagios en servidor
+12/28/2018 10:30:51 PM - DEBUG - webserver3 - ...Se configura nagios en servidor
+12/28/2018 10:30:51 PM - DEBUG - webserver1 - ..Se configuran las redes necesarias en host
+12/28/2018 10:30:51 PM - DEBUG - webserver1 - ...Red intra-lan1 ya existe, no se hace nada
+12/28/2018 10:30:51 PM - DEBUG - webserver1 - ...Red intra-lan2 ya existe, no se hace nada
+12/28/2018 10:30:51 PM - DEBUG - webserver1 - ...Red intra-mgmt ya existe, no se hace nada
+12/28/2018 10:30:51 PM - DEBUG - ****** -  Imagen detectada como ubuntu:18.04. Instalamos ifupdown.
+12/28/2018 10:30:54 PM - DEBUG - webserver1 - ..Se configuran las interfaces de red
+12/28/2018 10:30:54 PM - DEBUG - webserver1 - ..Se para el contenedor
+12/28/2018 10:30:55 PM - DEBUG - webserver1 - ...Se anade la red intra-lan1 a la interfaz eth0
+12/28/2018 10:30:55 PM - DEBUG - webserver1 - ...Se anade la red intra-lan2 a la interfaz eth1
+12/28/2018 10:30:55 PM - DEBUG - webserver1 - ...Se anade la red intra-mgmt a la interfaz eth2
+12/28/2018 10:30:55 PM - DEBUG - webserver1 - ..Se inicia el contenedor
+12/28/2018 10:30:56 PM - DEBUG - webserver1 - ..Se crea el plan de red
+12/28/2018 10:30:56 PM - DEBUG - webserver1 - ...Se configura eth0
+12/28/2018 10:30:56 PM - DEBUG - webserver1 - ...Se configura eth1
+12/28/2018 10:30:56 PM - DEBUG - webserver1 - ...Se configura eth2
+12/28/2018 10:30:56 PM - DEBUG - webserver1 - ..Se aplica el plan de red
+12/28/2018 10:30:56 PM - WARNING - webserver1 - ...Se habilita redireccionamiento IP
+12/28/2018 10:30:56 PM - DEBUG - webserver2 - .Se crea el contenedor
+12/28/2018 10:31:03 PM - DEBUG - webserver2 - .Se configura el contenedor
+12/28/2018 10:31:03 PM - DEBUG - webserver2 - ..Se actualizan los paquetes
+12/28/2018 10:31:05 PM - DEBUG - webserver2 - ..Se instalan las dependencias
+12/28/2018 10:31:05 PM - DEBUG - webserver2 - ...Se instala lynx
+12/28/2018 10:31:07 PM - DEBUG - webserver2 - ...Se instala net-tools
+12/28/2018 10:31:08 PM - DEBUG - webserver2 - ...Se instala git
+12/28/2018 10:31:16 PM - DEBUG - webserver2 - ...Se instala npm
+12/28/2018 10:31:51 PM - DEBUG - webserver2 - ...Se instala mariadb-client
+12/28/2018 10:31:57 PM - DEBUG - webserver2 - ...Se instala glusterfs-client
+12/28/2018 10:32:11 PM - DEBUG - webserver2 - ..Dependencias instaladas
+12/28/2018 10:32:11 PM - DEBUG - webserver2 - ..Se configuran las variables de entorno
+12/28/2018 10:32:11 PM - DEBUG - webserver2 - ...Se anade: DATABASE_URL=mysql://quiz:xxxx@10.1.2.4/quiz
+12/28/2018 10:32:11 PM - DEBUG - webserver2 - ...Se anade: QUIZ_OPEN_REGISTER=yes
+12/28/2018 10:32:11 PM - DEBUG - webserver2 - ..Se ejecuta la pila de run definidos
+12/28/2018 10:32:11 PM - DEBUG - webserver2 - ...Se ejecuta: git clone https://github.com/CORE-UPM/quiz_2019.git /root/quiz_2019 1>/dev/null
+12/28/2018 10:32:13 PM - DEBUG - webserver2 - ...Se ejecuta: mkdir /root/quiz_2019/public/uploads
+12/28/2018 10:32:13 PM - DEBUG - webserver2 - ...Se ejecuta: cd /root/quiz_2019; npm install 1>/dev/null
+12/28/2018 10:32:39 PM - DEBUG - webserver2 - ...Se ejecuta: cd /root/quiz_2019; npm install -g forever 1>/dev/null
+12/28/2018 10:32:52 PM - DEBUG - webserver2 - ...Se ejecuta: cd /root/quiz_2019; npm install --save mysql2 1>/dev/null
+12/28/2018 10:32:55 PM - DEBUG - webserver2 - ..Se genera el script a correr on-boot
+12/28/2018 10:32:55 PM - DEBUG - webserver2 - ...Se anade: export DATABASE_URL=mysql://quiz:xxxx@10.1.2.4/quiz
+12/28/2018 10:32:55 PM - DEBUG - webserver2 - ...Se anade: export QUIZ_OPEN_REGISTER=yes
+12/28/2018 10:32:55 PM - DEBUG - webserver2 - ...Se anade: forever start /root/quiz_2019/bin/www
+12/28/2018 10:32:55 PM - DEBUG - webserver2 - ...Se sube el script a webserver2/etc/init.d/
+12/28/2018 10:32:55 PM - DEBUG - webserver2 - ..Se configuran las redes necesarias en host
+12/28/2018 10:32:55 PM - DEBUG - webserver2 - ...Red intra-lan1 ya existe, no se hace nada
+12/28/2018 10:32:55 PM - DEBUG - webserver2 - ...Red intra-lan2 ya existe, no se hace nada
+12/28/2018 10:32:55 PM - DEBUG - webserver2 - ...Red intra-mgmt ya existe, no se hace nada
+12/28/2018 10:32:55 PM - DEBUG - ****** -  Imagen detectada como ubuntu:18.04. Instalamos ifupdown.
+12/28/2018 10:32:58 PM - DEBUG - webserver2 - ..Se configuran las interfaces de red
+12/28/2018 10:32:58 PM - DEBUG - webserver2 - ..Se para el contenedor
+12/28/2018 10:32:59 PM - DEBUG - webserver2 - ...Se anade la red intra-lan1 a la interfaz eth0
+12/28/2018 10:32:59 PM - DEBUG - webserver2 - ...Se anade la red intra-lan2 a la interfaz eth1
+12/28/2018 10:32:59 PM - DEBUG - webserver2 - ...Se anade la red intra-mgmt a la interfaz eth2
+12/28/2018 10:32:59 PM - DEBUG - webserver2 - ..Se inicia el contenedor
+12/28/2018 10:33:00 PM - DEBUG - webserver2 - ..Se crea el plan de red
+12/28/2018 10:33:00 PM - DEBUG - webserver2 - ...Se configura eth0
+12/28/2018 10:33:00 PM - DEBUG - webserver2 - ...Se configura eth1
+12/28/2018 10:33:00 PM - DEBUG - webserver2 - ...Se configura eth2
+12/28/2018 10:33:00 PM - DEBUG - webserver2 - ..Se aplica el plan de red
+12/28/2018 10:33:00 PM - WARNING - webserver2 - ...Se habilita redireccionamiento IP
+12/28/2018 10:33:00 PM - DEBUG - webserver3 - .Se crea el contenedor
+12/28/2018 10:33:06 PM - DEBUG - webserver3 - .Se configura el contenedor
+12/28/2018 10:33:06 PM - DEBUG - webserver3 - ..Se actualizan los paquetes
+12/28/2018 10:33:14 PM - DEBUG - webserver3 - ..Se instalan las dependencias
+12/28/2018 10:33:14 PM - DEBUG - webserver3 - ...Se instala lynx
+12/28/2018 10:33:16 PM - DEBUG - webserver3 - ...Se instala net-tools
+12/28/2018 10:33:17 PM - DEBUG - webserver3 - ...Se instala git
+12/28/2018 10:33:25 PM - DEBUG - webserver3 - ...Se instala npm
+12/28/2018 10:34:00 PM - DEBUG - webserver3 - ...Se instala mariadb-client
+12/28/2018 10:34:05 PM - DEBUG - webserver3 - ...Se instala glusterfs-client
+12/28/2018 10:34:20 PM - DEBUG - webserver3 - ..Dependencias instaladas
+12/28/2018 10:34:20 PM - DEBUG - webserver3 - ..Se configuran las variables de entorno
+12/28/2018 10:34:20 PM - DEBUG - webserver3 - ...Se anade: DATABASE_URL=mysql://quiz:xxxx@10.1.2.4/quiz
+12/28/2018 10:34:20 PM - DEBUG - webserver3 - ...Se anade: QUIZ_OPEN_REGISTER=yes
+12/28/2018 10:34:20 PM - DEBUG - webserver3 - ..Se ejecuta la pila de run definidos
+12/28/2018 10:34:20 PM - DEBUG - webserver3 - ...Se ejecuta: git clone https://github.com/CORE-UPM/quiz_2019.git /root/quiz_2019 1>/dev/null
+12/28/2018 10:34:21 PM - DEBUG - webserver3 - ...Se ejecuta: mkdir /root/quiz_2019/public/uploads
+12/28/2018 10:34:22 PM - DEBUG - webserver3 - ...Se ejecuta: cd /root/quiz_2019; npm install 1>/dev/null
+12/28/2018 10:34:49 PM - DEBUG - webserver3 - ...Se ejecuta: cd /root/quiz_2019; npm install -g forever 1>/dev/null
+12/28/2018 10:35:00 PM - DEBUG - webserver3 - ...Se ejecuta: cd /root/quiz_2019; npm install --save mysql2 1>/dev/null
+12/28/2018 10:35:02 PM - DEBUG - webserver3 - ..Se genera el script a correr on-boot
+12/28/2018 10:35:02 PM - DEBUG - webserver3 - ...Se anade: export DATABASE_URL=mysql://quiz:xxxx@10.1.2.4/quiz
+12/28/2018 10:35:02 PM - DEBUG - webserver3 - ...Se anade: export QUIZ_OPEN_REGISTER=yes
+12/28/2018 10:35:02 PM - DEBUG - webserver3 - ...Se anade: forever start /root/quiz_2019/bin/www
+12/28/2018 10:35:02 PM - DEBUG - webserver3 - ...Se sube el script a webserver3/etc/init.d/
+12/28/2018 10:35:03 PM - DEBUG - webserver3 - ..Se configuran las redes necesarias en host
+12/28/2018 10:35:03 PM - DEBUG - webserver3 - ...Red intra-lan1 ya existe, no se hace nada
+12/28/2018 10:35:03 PM - DEBUG - webserver3 - ...Red intra-lan2 ya existe, no se hace nada
+12/28/2018 10:35:03 PM - DEBUG - webserver3 - ...Red intra-mgmt ya existe, no se hace nada
+12/28/2018 10:35:03 PM - DEBUG - ****** -  Imagen detectada como ubuntu:18.04. Instalamos ifupdown.
+12/28/2018 10:35:06 PM - DEBUG - webserver3 - ..Se configuran las interfaces de red
+12/28/2018 10:35:06 PM - DEBUG - webserver3 - ..Se para el contenedor
+12/28/2018 10:35:07 PM - DEBUG - webserver3 - ...Se anade la red intra-lan1 a la interfaz eth0
+12/28/2018 10:35:07 PM - DEBUG - webserver3 - ...Se anade la red intra-lan2 a la interfaz eth1
+12/28/2018 10:35:07 PM - DEBUG - webserver3 - ...Se anade la red intra-mgmt a la interfaz eth2
+12/28/2018 10:35:07 PM - DEBUG - webserver3 - ..Se inicia el contenedor
+12/28/2018 10:35:07 PM - DEBUG - webserver3 - ..Se crea el plan de red
+12/28/2018 10:35:07 PM - DEBUG - webserver3 - ...Se configura eth0
+12/28/2018 10:35:07 PM - DEBUG - webserver3 - ...Se configura eth1
+12/28/2018 10:35:07 PM - DEBUG - webserver3 - ...Se configura eth2
+12/28/2018 10:35:07 PM - DEBUG - webserver3 - ..Se aplica el plan de red
+12/28/2018 10:35:08 PM - WARNING - webserver3 - ...Se habilita redireccionamiento IP
+12/28/2018 10:35:08 PM - DEBUG - ****** - ..Se ejecuta la pila de scripts literales definidos
+12/28/2018 10:35:08 PM - DEBUG - ****** - ...Se ejecuta: lxc exec webserver1 -- bash -c "export DATABASE_URL=mysql://quiz:xxxx@10.1.2.4/quiz; export QUIZ_OPEN_REGISTER=yes; cd /root/quiz_2019; npm run-script migrate_cdps"
+12/28/2018 10:35:10 PM - DEBUG - ****** - ...Se ejecuta: lxc exec webserver1 -- bash -c "export DATABASE_URL=mysql://quiz:xxxx@10.1.2.4/quiz; export QUIZ_OPEN_REGISTER=yes; cd /root/quiz_2019; npm run-script seed_cdps"
+12/28/2018 10:35:12 PM - DEBUG - ****** - ...Se ejecuta: lxc exec webserver1 -- bash -c "mount -t glusterfs 10.1.2.5:/nas /root/quiz_2019/public/uploads"
+12/28/2018 10:35:12 PM - DEBUG - ****** - ...Se ejecuta: lxc exec webserver2 -- bash -c "mount -t glusterfs 10.1.2.6:/nas /root/quiz_2019/public/uploads"
+12/28/2018 10:35:12 PM - DEBUG - ****** - ...Se ejecuta: lxc exec webserver3 -- bash -c "mount -t glusterfs 10.1.2.7:/nas /root/quiz_2019/public/uploads"

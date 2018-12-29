@@ -46,9 +46,9 @@ fi
 
 # if everything is installed and we are root -> install containers
 
-python ./lxc-setup.py ./management/nagios-cfg.json
-python ./lxc-setup.py ./firewall/firewall-cfg.json
-python ./lxc-setup.py ./loadbalancer/loadbalancer-cfg.json
-python ./lxc-setup.py ./database/database-cfg.json
-python ./lxc-setup.py ./storage/storage-cfg.json
-python ./lxc-setup.py ./webapp/webserver-cfg.json
+python ./lxc-setup.py ../templates/management/nagios-cfg.json
+python ./lxc-setup.py ../templates/firewall/firewall-cfg.json
+python ./lxc-setup.py ../templates/loadbalancer/loadbalancer-cfg.json
+python ./lxc-setup.py ../templates/database/database-cfg.json
+python ./lxc-setup.py ../templates/storage/storage-cfg.json
+python ./lxc-setup.py ../templates/webapp/webserver-cfg.json
