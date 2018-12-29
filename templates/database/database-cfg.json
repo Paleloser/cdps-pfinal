@@ -8,7 +8,7 @@
     {
       "name": "eth0",
       "network": "intra-lan2",
-      "address": "10.1.2.4/24"
+      "address": "10.1.2.1/24"
     }
   ],
   "run": [

@@ -16,6 +16,7 @@ lxc delete storage1 --force
 lxc delete storage2 --force
 lxc delete storage3 --force
 lxc delete database1 --force
+lxc delete database2 --force
 
 echo "Desconectando interfaces de red"
 sudo ifconfig intra-lan0 down
