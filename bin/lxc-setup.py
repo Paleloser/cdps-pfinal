@@ -177,7 +177,8 @@ def configContainerNetwork(node, cfg):
   os.system('lxc stop %s 1>/dev/null' % (node))
   for interface in cfg['interfaces']:
     if interface['network'] == 'default':
-      continue
+      logger.debug('%s - ...Se anade la red lxdbr0 a la interfaz %s' % (node, interface['name']))
+      os.system('lxc network attach lxdbr0 %s %s' % (node, interface['name']))
     else:
       logger.debug('%s - ...Se anade la red %s a la interfaz %s' % (node, interface['network'], interface['name']))
       os.system('lxc network attach %s %s %s' % (interface['network'], node, interface['name']))
