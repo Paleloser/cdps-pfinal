@@ -5,16 +5,22 @@ if [ $user != 'root' ]; then
 fi
 
 echo "Borrando contenedores..."
+echo "Borrando contenedores nagios"
 lxc delete nagios1 --force
+echo "Borrando contenedores firewall"
 lxc delete firewall1 --force
+echo "Borrando contenedores loadbalancer"
 lxc delete loadbalancer1 --force
+echo "Borrando contenedores webserver"
 lxc delete webserver1 --force
 lxc delete webserver2 --force
 lxc delete webserver3 --force
 lxc delete webserver4 --force
+echo "Borrando contenedores storage"
 lxc delete storage1 --force
 lxc delete storage2 --force
 lxc delete storage3 --force
+echo "Borrando contenedores database"
 lxc delete database1 --force
 lxc delete database2 --force
 
