@@ -51,4 +51,5 @@ python ./lxc-setup.py ../templates/firewall/firewall-cfg.json
 python ./lxc-setup.py ../templates/loadbalancer/loadbalancer-cfg.json
 python ./lxc-setup.py ../templates/database/database-upgrade-cfg.json
 python ./lxc-setup.py ../templates/storage/storage-cfg.json
-python ./lxc-setup.py ../templates/webapp/webserver-upgrade-cfg.json
+python ./lxc-setup.py ../templates/webapp/webserver-cfg.json
+python ./lxc-setup.py ../templates/webapp/webserver-add-cfg.json

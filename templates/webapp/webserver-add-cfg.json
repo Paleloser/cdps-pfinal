@@ -1,6 +1,6 @@
 {
   "image": "images:ubuntu/18.04",
-  "name": "webserver",
+  "name": "webserver-cpy",
   "dependencies": [
     "lynx",
     "net-tools",
@@ -40,6 +40,6 @@
     "QUIZ_OPEN_REGISTER": "yes"
   },
   "scripts": [
-    "lxc exec webserver4 -- bash -c \"mount -t glusterfs 10.1.2.18:/nas /root/quiz_2019/public/uploads\""
+    "lxc exec webserver-cpy1 -- bash -c \"mount -t glusterfs 10.1.2.18:/nas /root/quiz_2019/public/uploads\""
   ]
 }
