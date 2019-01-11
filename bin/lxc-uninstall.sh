@@ -16,6 +16,7 @@ lxc delete webserver1 --force
 lxc delete webserver2 --force
 lxc delete webserver3 --force
 lxc delete webserver4 --force
+lxc delete webserver-cpy1 --force
 echo "Borrando contenedores storage"
 lxc delete storage1 --force
 lxc delete storage2 --force
