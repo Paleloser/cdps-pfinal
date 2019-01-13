@@ -33,7 +33,7 @@
   "cmd": [
     "export DATABASE_URL=mysql://quiz:xxxx@10.1.2.1/quiz",
     "export QUIZ_OPEN_REGISTER=yes",
-    "forever start /root/quiz_2019/bin/www"
+    "cd /root/quiz_2019; forever start bin/www"
   ],
   "env": {
     "DATABASE_URL": "mysql://quiz:xxxx@10.1.2.1/quiz",
