@@ -41,7 +41,7 @@ if python -c 'import pkgutil; exit(not pkgutil.find_loader("yaml"))'; then
     echo '[******]..Paquete de python yaml ya instalado'
 else
     echo '[******]..Se instala el paquete de python: yaml'
-    pip install yaml
+    pip install pyyaml
 fi
 
 # if everything is installed and we are root -> install containers
