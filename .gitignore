@@ -1,3 +1,4 @@
 VNXLAB2018-v1.ova
 *.pdf
 scripts/lxc-py-*
+!Memoria.pdf
