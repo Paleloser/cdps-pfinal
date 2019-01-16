@@ -44,11 +44,15 @@ else
     pip install pyyaml
 fi
 
-# if everything is installed and we are root -> install containers
-
+# primero se crea el contenedor de monitoreo para poder habilitar monitorizacion en resto
 python ./lxc-setup.py ../templates/management/nagios-cfg.json
+# se crea el firewall, que hará NAt y filtro de paquetes
 python ./lxc-setup.py ../templates/firewall/firewall-cfg.json
+# se crea el balanceador, que distribuira la carga entre 4 webservers, comprobando si estan activos
 python ./lxc-setup.py ../templates/loadbalancer/loadbalancer-cfg.json
+# se crea el conjunto de bases de datos con replica maestra/esclavo
 python ./lxc-setup.py ../templates/database/database-upgrade-cfg.json
+# se crea el cluster de almacenamiento NAS replicado mediante glusterfs
 python ./lxc-setup.py ../templates/storage/storage-cfg.json
+# por ultimo, creamos los contenedores con las aplicaciones web
 python ./lxc-setup.py ../templates/webapp/webserver-cfg.json

@@ -15,15 +15,15 @@ echo "Borrando contenedores webserver"
 lxc delete webserver1 --force
 lxc delete webserver2 --force
 lxc delete webserver3 --force
-lxc delete webserver4 --force
-lxc delete webserver-cpy1 --force
+lxc delete webserver4 --force # este estara presente si hemos decidido crear el cuarto servidor desde un inicio
+lxc delete webserver-cpy1 --force # este estara presente si hemos decidido crear el cuarto servidor en caliente
 echo "Borrando contenedores storage"
 lxc delete storage1 --force
 lxc delete storage2 --force
 lxc delete storage3 --force
 echo "Borrando contenedores database"
 lxc delete database1 --force
-lxc delete database2 --force
+lxc delete database2 --force # esta estara presente si hemos pasado la plantilla con replicacion en base de datos
 
 echo "Desconectando interfaces de red"
 sudo ifconfig intra-lan0 down
